@@ -1,0 +1,28 @@
+jobs:
+
+- job: macos_hosted
+  pool:
+    vmImage: 'macOS-10.14'
+    
+  variables:
+    vcpkgPackages: 'sqlite3'
+    system.debug: true
+
+  steps:
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: 'brew install gcc'
+
+    - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+      displayName: 'Run vcpkg'
+      inputs:
+        vcpkgTriplet: 'x64-osx'
+        vcpkgArguments: '$(vcpkgPackages)'
+
+    - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+      displayName: 'Run CMake with Ninja'
+      inputs:
+        cmakeListsTxtPath: 'cmakelists.txt/CMakeLists.txt'
+        useVcpkgToolchainFile: true
+        buildWithCMakeArgs: '-- -v'

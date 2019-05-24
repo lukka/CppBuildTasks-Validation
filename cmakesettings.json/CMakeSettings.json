@@ -1,0 +1,87 @@
+{
+    // See https://go.microsoft.com//fwlink//?linkid=834763 for more information about this file.
+    "configurations": [
+        {
+            "name": "Linux-toolchainvariable",
+            "generator": "Ninja",
+            "configurationType": "Debug",
+            "inheritEnvironments": [
+                "msvc_x86"
+            ],
+            "cmakeCommandArgs": "",
+            "ctestCommandArgs": "",
+            "variables": [
+                {
+                    "name": "CMAKE_TOOLCHAIN_FILE",
+                    "type": "FILEPATH",
+                    "value": "${projectDir}/toolchain.cmake"
+                }
+            ],
+            "buildCommandArgs" : "-v"
+        },
+        {
+            "name": "Linux-toolchainproperty",
+            "generator": "Ninja",
+            "configurationType": "Debug",
+            "inheritEnvironments": [
+                "msvc_x86"
+            ],
+            "cmakeCommandArgs": "",
+            "ctestCommandArgs": "",
+            "cmakeToolchain": "${projectDir}/toolchain.cmake",
+            "buildCommandArgs" : "-v"
+        },
+        {
+            "name": "x86-Release",
+            "generator": "Ninja",
+            "configurationType": "RelWithDebInfo",
+            "inheritEnvironments": [
+                "msvc_x86"
+            ],
+            "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
+            "cmakeCommandArgs": "",
+            "buildCommandArgs": "",
+            "ctestCommandArgs": ""
+        },
+        {
+            "name": "x64-Debug",
+            "generator": "Ninja",
+            "configurationType": "Debug",
+            "inheritEnvironments": [
+                "msvc_x64"
+            ],
+            "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
+            "cmakeCommandArgs": "",
+            "buildCommandArgs": "",
+            "ctestCommandArgs": ""
+        },
+        {
+            "name": "x64-Release",
+            "generator": "Ninja",
+            "configurationType": "RelWithDebInfo",
+            "inheritEnvironments": [
+                "msvc_x64"
+            ],
+            "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
+            "cmakeCommandArgs": "",
+            "buildCommandArgs": "",
+            "ctestCommandArgs": ""
+        },
+        {
+            "name": "Linux-Release",
+            "generator": "Ninja",
+            "configurationType": "Release",
+            "cmakeCommandArgs": "",
+            "buildCommandArgs": "",
+            "ctestCommandArgs": ""
+        },
+        {
+            "name": "Linux-Release-Makefiles",
+            "generator": "Unix Makefiles",
+            "configurationType": "Release",
+            "cmakeCommandArgs": "",
+            "buildCommandArgs": "",
+            "ctestCommandArgs": ""
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+pool:
+  vmImage: vs2017-win2016
+  
+variables:
+  vcpkgPackages: 'sqlite3'
+  system.debug: true
+
+steps:
+  - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+    displayName: 'Run vcpkg'
+    inputs:
+      vcpkgGitCommitId: master
+      vcpkgTriplet: 'x64-windows'
+      vcpkgArguments: '$(vcpkgPackages)'
+
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    displayName: 'CMake+Ninja'
+    inputs:
+      cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+      cmakeListsTxtPath: '$(Build.SourcesDirectory)/cmakelists.txt/CMakeLists.txt'
+      useVcpkgToolchainFile: true
+      buildDirectory: '$(Build.BinariesDirectory)/ninja'
+      cmakeAppendedArgs: '-G Ninja '
+
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    displayName: 'CMake+VS15'
+    inputs:
+      cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+      cmakeListsTxtPath: '$(Build.SourcesDirectory)/cmakelists.txt/CMakeLists.txt'
+      useVcpkgToolchainFile: true
+      buildDirectory: '$(Build.BinariesDirectory)/vs15'
+      cmakeAppendedArgs: '-G "Visual Studio 15 2017" -A x64'
+
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    displayName: 'CMakeSettings.json'
+    inputs:
+      cmakeListsOrSettingsJson: CMakeSettingsJson
+      cmakeSettingsJsonPath: 'cmakesettings.json/CMakeSettings.json'
+      useVcpkgToolchainFile: true
+      configurationRegexFilter: 'x86-Release'
