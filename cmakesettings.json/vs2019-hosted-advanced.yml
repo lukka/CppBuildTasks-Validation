@@ -12,7 +12,6 @@ steps:
       vcpkgGitCommitId: master
       vcpkgTriplet: 'x64-windows'
       vcpkgArguments: '$(vcpkgPackages)'
-
   - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMake+Ninja'
     inputs:
@@ -21,7 +20,6 @@ steps:
       useVcpkgToolchainFile: true
       buildDirectory: '$(Build.BinariesDirectory)/ninja'
       cmakeAppendedArgs: '-G Ninja '
-
   - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMake+VS15'
     inputs:
@@ -29,7 +27,6 @@ steps:
       cmakeListsTxtPath: '$(Build.SourcesDirectory)/cmakelists.txt/CMakeLists.txt'
       useVcpkgToolchainFile: true
       buildDirectory: '$(Build.BinariesDirectory)/vs16'
-
   - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMakeSettings.json'
     inputs:

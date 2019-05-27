@@ -12,7 +12,6 @@ steps:
       vcpkgTriplet: 'x64-linux'
       vcpkgArguments: '$(vcpkgPackages)'
       vcpkgGitURL: 'https://github.com/Microsoft/vcpkg.git'
-
   - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMake+Makefiles'
     inputs:
@@ -23,7 +22,6 @@ steps:
       cmakeAppendedArgs: '-G "Unix Makefiles" '
       buildWithCMakeArgs: '-- -j'
       vcpkgTriplet: '$(VCPKG_TRIPLET)'
-
   - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMake+Ninja'
     inputs:
@@ -32,7 +30,6 @@ steps:
       useVcpkgToolchainFile: true
       buildDirectory: '$(Build.BinariesDirectory)/ninja'
       cmakeAppendedArgs: '-G "Ninja"'
-
   - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMakeSettings.json'
     inputs:
@@ -40,7 +37,6 @@ steps:
       cmakeSettingsJsonPath: 'cmakesettings.json/CMakeSettings.json'
       useVcpkgToolchainFile: true
       configurationRegexFilter: 'Linux-Release'
-
   - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMakeSettings.json toolchain property'
     inputs:
@@ -48,7 +44,6 @@ steps:
       cmakeSettingsJsonPath: 'cmakesettings.json/CMakeSettings.json'
       useVcpkgToolchainFile: true
       configurationRegexFilter: 'toolchainproperty'
-
   - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMakeSettings.json toolchain variable'
     inputs:
@@ -56,7 +51,6 @@ steps:
       cmakeSettingsJsonPath: 'cmakesettings.json/CMakeSettings.json'
       useVcpkgToolchainFile: true
       configurationRegexFilter: 'toolchainvariable'
-
   - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMakeSettings.json all Linux configurations'
     inputs:
