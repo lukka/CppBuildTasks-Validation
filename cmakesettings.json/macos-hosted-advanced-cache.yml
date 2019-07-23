@@ -1,0 +1,57 @@
+pool:
+  vmImage: 'macOS-10.14'
+
+variables:
+  system.debug: true
+  vcpkgGitRef: 59a7c2cc95a3b46e9e2d1aa753917246c2801e50
+
+steps:
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: 'brew install gcc'
+  - task: CacheBeta@0
+    displayName: Cache vcpkg
+    inputs:
+      key: $(Build.SourcesDirectory)/cmakesettings.json/vcpkg_x64-osx.txt
+        $(vcpkgGitRef)
+        $(Agent.Name)
+      path: '$(Build.BinariesDirectory)/vcpkg'
+  - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+    displayName: 'Run vcpkg'
+    inputs:
+      vcpkgArguments: '@$(Build.SourcesDirectory)/cmakesettings.json/vcpkg_x64-osx.txt'
+      vcpkgGitURL: https://github.com/lukka/vcpkg.git
+      vcpkgGitCommitId: $(vcpkgGitRef)
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    displayName: 'CMake+Makefiles'
+    inputs:
+      cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+      cmakeListsTxtPath: '$(Build.SourcesDirectory)/cmakesettings.json/CMakeLists.txt'
+      useVcpkgToolchainFile: true
+      buildDirectory: '$(Build.BinariesDirectory)/unixmakefiles'
+      cmakeAppendedArgs: '-G "Unix Makefiles" '
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    displayName: 'CMake+XCode'
+    inputs:
+      cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+      cmakeListsTxtPath: '$(Build.SourcesDirectory)/cmakesettings.json/CMakeLists.txt'
+      useVcpkgToolchainFile: true
+      buildDirectory: '$(Build.BinariesDirectory)/xcode'
+      cmakeAppendedArgs: '-G Xcode'
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    displayName: 'CMake+Ninja'
+    inputs:
+      cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+      cmakeListsTxtPath: '$(Build.SourcesDirectory)/cmakesettings.json/CMakeLists.txt'
+      useVcpkgToolchainFile: true
+      buildDirectory: '$(Build.BinariesDirectory)/ninja'
+      cmakeAppendedArgs: '-G "Ninja"'
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    displayName: 'CMakeSettings.json'
+    inputs:
+      cmakeListsOrSettingsJson: CMakeSettingsJson
+      cmakeSettingsJsonPath: 'cmakesettings.json/CMakeSettings.json'
+      useVcpkgToolchainFile: true
+      configurationRegexFilter: 'Linux-Release'
+
