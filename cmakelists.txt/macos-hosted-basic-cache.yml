@@ -20,8 +20,6 @@ jobs:
           $(vcpkgGitRef)
           $(Agent.Name)
         path: '$(Build.BinariesDirectory)/vcpkg'
-    - script: ls -lart $(Build.BinariesDirectory)/vcpkg || echo "not there"
-      continueOnError: true
     - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
       displayName: 'Run vcpkg'
       inputs:
@@ -34,5 +32,3 @@ jobs:
         cmakeListsTxtPath: '$(Build.SourcesDirectory)/cmakelists.txt/CMakeLists.txt'
         useVcpkgToolchainFile: true
         buildWithCMakeArgs: '-- -v'
-    - script: ls -lart $(Build.BinariesDirectory)/vcpkg || echo "not there"
-      continueOnError: true
