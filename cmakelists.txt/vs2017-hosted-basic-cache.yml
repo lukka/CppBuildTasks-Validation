@@ -6,15 +6,13 @@ jobs:
 
   variables:
     system.debug: true
-    vcpkgGitRef: 59a7c2cc95a3b46e9e2d1aa753917246c2801e50
+    vcpkgGitRef: 36d276a19af03210c3fffcdee844b32b9b65334e
 
   steps:
     - task: CacheBeta@0
       displayName: Cache vcpkg
       inputs:
-        key: $(Build.SourcesDirectory)/cmakelists.txt/vcpkg_x64-windows.txt
-          $(vcpkgGitRef)
-          $(Agent.Name)
+        key: $(Build.SourcesDirectory)/cmakelists.txt/vcpkg_x64-windows.txt | "$(vcpkgGitRef)" | "$(Agent.Name)"
         path: '$(Build.BinariesDirectory)/vcpkg'
     - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
       displayName: 'Run vcpkg'
