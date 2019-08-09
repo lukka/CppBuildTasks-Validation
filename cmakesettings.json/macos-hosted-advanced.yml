@@ -2,6 +2,7 @@ pool:
   vmImage: 'macOS-10.14'
 
 variables:
+  system.debug: true
   vcpkgPackages: 'sqlite3'
 
 steps:
