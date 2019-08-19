@@ -6,20 +6,22 @@ jobs:
 
   variables:
     system.debug: true
-    vcpkgGitRef: 36d276a19af03210c3fffcdee844b32b9b65334e
+    # Since vcpkg is a Git submodule, its commit id is stored at /.git/modules/vcpkg/HEAD.
+    # vcpkgGitRef: not needed !
 
   steps:
+    - checkout: self
+      submodules: recursive
     - task: CacheBeta@0
       displayName: Cache vcpkg
       inputs:
-        key: $(Build.SourcesDirectory)/cmakelists.txt/vcpkg_x64-linux.txt | "$(vcpkgGitRef)" | "$(Agent.Name)"
+        key: $(Build.SourcesDirectory)/cmakelists.txt/vcpkg_x64-linux.txt | "$(Agent.OS)" | $(Build.SourcesDirectory)/.git/modules/vcpkg/HEAD | "gcc"
         path: '$(Build.SourcesDirectory)/vcpkg'
     - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
       displayName: 'Run vcpkg'
       inputs:
         vcpkgArguments: '@$(Build.SourcesDirectory)/cmakelists.txt/vcpkg_x64-linux.txt'
-        vcpkgGitCommitId: $(vcpkgGitRef)
-        vcpkgGitURL: https://github.com/lukka/vcpkg.git
+        vcpkgDirectory: '$(Build.SourcesDirectory)/vcpkg'
     - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
       displayName: 'Run CMake with Ninja'
       inputs:
