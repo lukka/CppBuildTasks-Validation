@@ -9,7 +9,7 @@ steps:
   - task: CacheBeta@0
     displayName: Cache vcpkg
     inputs:
-      key: $(Build.SourcesDirectory)/cmakesettings.json/vcpkg_x64-windows.txt | "$(vcpkgGitRef)" | "$(Agent.Name)"
+      key: $(Build.SourcesDirectory)/cmakesettings.json/vcpkg_x64-windows.txt | "$(vcpkgGitRef)" | "$(Agent.OS)"
       path: '$(Build.BinariesDirectory)/vcpkg'
   - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
     displayName: 'Run vcpkg'
