@@ -9,10 +9,7 @@ variables:
 steps:
   - checkout: self
     submodules: recursive
-  - task: Bash@3
-    inputs:
-      targetType: 'inline'
-      script: 'brew install gcc'
+  - template: ../templates/install-gcc-macos.yml
   - task: CacheBeta@0
     displayName: Cache vcpkg
     inputs:

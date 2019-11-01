@@ -6,10 +6,7 @@ variables:
   vcpkgPackages: 'sqlite3'
 
 steps:
-  - task: Bash@3
-    inputs:
-      targetType: 'inline'
-      script: 'brew install gcc'
+  - template: ../templates/install-gcc-macos.yml
   - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
     displayName: 'Run vcpkg'
     inputs:

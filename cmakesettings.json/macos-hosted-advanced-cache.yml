@@ -6,10 +6,7 @@ variables:
   vcpkgGitRef: 36d276a19af03210c3fffcdee844b32b9b65334e
 
 steps:
-  - task: Bash@3
-    inputs:
-      targetType: 'inline'
-      script: 'brew install gcc'
+  - template: ../templates/install-gcc-macos.yml
   - task: CacheBeta@0
     displayName: Cache vcpkg
     inputs:
