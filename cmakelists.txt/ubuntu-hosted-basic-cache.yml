@@ -6,21 +6,21 @@ jobs:
 
   variables:
     system.debug: true
-    vcpkgGitRef: 36d276a19af03210c3fffcdee844b32b9b65334e
+    vcpkgGitRef: 2019.10
 
   steps:
-    - task: CacheBeta@0
+    - task: Cache@2
       displayName: Cache vcpkg
       inputs:
         key: $(Build.SourcesDirectory)/cmakelists.txt/vcpkg_x64-linux.txt | "$(vcpkgGitRef)" | "$(Agent.OS)"
-        path: '$(Build.SourcesDirectory)/vcpkg'
-    - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+        path: '$(Build.BinariesDirectory)/vcpkg'
+    - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
       displayName: 'Run vcpkg'
       inputs:
         vcpkgArguments: '@$(Build.SourcesDirectory)/cmakelists.txt/vcpkg_x64-linux.txt'
         vcpkgGitCommitId: $(vcpkgGitRef)
         vcpkgGitURL: https://github.com/lukka/vcpkg.git
-    - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
       displayName: 'Run CMake with Ninja'
       inputs:
         cmakeListsTxtPath: 'cmakelists.txt/CMakeLists.txt'

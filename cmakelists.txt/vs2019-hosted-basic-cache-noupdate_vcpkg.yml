@@ -1,0 +1,56 @@
+variables:
+  system.debug: true
+  thisRepo: 'CppBuildTasks-Validation'
+  vcpkgGitRef: 2019.10
+  # vcpkgTriplet: 'x64-windows' Not needed as extracted from the command line arguments.
+
+resources:
+  repositories:
+  - repository: vcpkg
+    type: github
+    name: microsoft/vcpkg
+    endpoint: vcpkg
+    ref: refs/tags/$(vcpkgGitRef)
+
+jobs:
+
+- job: vs2019_hosted
+  pool:
+    name: Hosted Windows 2019 with VS2019
+
+  steps:
+    - checkout: self
+      submodules: recursive
+    - checkout: vcpkg
+      displayName: "Checkout vcpkg in '$(Build.SourcesDirectory)/vcpkg'"
+    - task: Cache@2
+      displayName: Cache vcpkg
+      inputs:
+        key: $(Build.SourcesDirectory)/$(thisRepo)/cmakelists.txt/vcpkg_x64-windows.txt | "$(vcpkgGitRef)" | "$(Agent.OS)"
+        path: '$(Build.SourcesDirectory)/vcpkg'
+    - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+      displayName: 'Run vcpkg on the submodule without updating'
+      inputs:
+        # vcpkgTriplet: $(vcpkgTriplet) This is not needed as it is extracted by the response file anyway.
+        vcpkgArguments: '@$(Build.SourcesDirectory)/$(thisRepo)/cmakelists.txt/vcpkg_x64-windows.txt'
+        vcpkgDirectory: '$(Build.SourcesDirectory)/$(thisRepo)/vcpkg'
+        cleanAfterBuild: true
+        doNotUpdateVcpkg: true
+    - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+      displayName: 'Run vcpkg on the directory (indipendently check-ed out) without updating'
+      inputs:
+        vcpkgArguments: '@$(Build.SourcesDirectory)/$(thisRepo)/cmakelists.txt/vcpkg_x64-windows.txt'
+        vcpkgDirectory: '$(Build.SourcesDirectory)/vcpkg'
+        cleanAfterBuild: true
+        doNotUpdateVcpkg: true
+
+    - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+      displayName: 'Run CMake with Visual Studio Generator -  Release Configuration'
+      inputs:
+        cmakeListsTxtPath: '$(thisRepo)/cmakelists.txt/CMakeLists.txt'
+        useVcpkgToolchainFile: true
+        buildDirectory: '$(Build.ArtifactStagingDirectory)'
+        buildWithCMakeArgs: ' --config Release -- /verbosity:detailed'
+        configurationType: Release
+        cmakeGenerator: VS16Win64
+

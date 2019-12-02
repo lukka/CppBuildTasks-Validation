@@ -1,0 +1,82 @@
+# https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions
+name: main
+on: [push]
+
+# enable debug with secrets: 
+# https://github.com/actions/toolkit/blob/2c6d31be8f9c8201d3cc9384133b933543b69075/docs/action-debugging.md
+
+jobs:
+  job:
+    env:
+      vcpkgGitCommitId: '2019.10'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: windows-latest
+            triplet: x64-windows
+          - os: ubuntu-latest
+            triplet: x64-linux
+          - os: macos-latest
+            triplet: x64-osx
+    steps:
+      # https://github.com/actions/checkout
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJson(job) }}
+        run: echo "$JOB_CONTEXT"
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
+      - name: Dump runner context
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
+        run: echo "$RUNNER_CONTEXT"
+      - name: Dump strategy context
+        env:
+          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+        run: echo "$STRATEGY_CONTEXT"
+      - name: Dump matrix context
+        env:
+          MATRIX_CONTEXT: ${{ toJson(matrix) }}
+        run: echo "$MATRIX_CONTEXT"
+      # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/caching-dependencies-to-speed-up-workflows
+      - name: Cache vcpkg artifacts
+        uses: actions/cache@v1
+        with:
+          path: ${{ github.workspace }}/../b/vcpkg
+          key: ${{ runner.OS }}-${{ env.vcpkgCommitId }}
+          #-${{ hashFiles('${{ runner.workspace }}/cmakesettings.json/vcpkg_x64.txt') }}-${{ hashFiles('${{ runner.workspace }}/.git/modules/vcpkg/HEAD') }}
+      - name: dir
+        run: find ${{ runner.workspace }}
+        if: "!contains( matrix.os, 'windows')"
+      - name: dir
+        run: gci -recurse ${{ runner.workspace }}
+        if: contains( matrix.os, 'windows')
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@dev
+        id: runvcpkg
+        with:
+          # Member field access: https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions
+          vcpkgArguments: '@${{ github.workspace }}/cmakesettings.json/vcpkg_x64.txt --triplet ${{ matrix.triplet }}'
+          vcpkgDirectory: ${{ github.workspace }}/../b/vcpkg
+          vcpkgGitCommitId: ${{ env.vcpkgGitCommitId }}
+      - name: Run CMake
+        uses: lukka/run-cmake@dev
+        id: runcmake
+        with:
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'
+          useVcpkgToolchainFile: true
+          buildWithCMakeArgs: '-- -v'
+      - name: Prints output of run-vcpkg's task
+        run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET }}' "
