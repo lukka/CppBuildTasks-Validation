@@ -1,0 +1,104 @@
+# Copyright (c) 2019-2020 Luca Cappa
+# Released under the term specified in file LICENSE.txt
+# SPDX short identifier: MIT
+name: hosted-cmakesettingsjson-cache-submod_vcpkg
+on: [push]
+
+jobs:
+  job:
+    name: ${{ matrix.os }}-hosted-cmakesettingsjson-cache-submod_vcpkg
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: windows-latest
+            triplet: x64-windows
+            configuration: 'x64.*'
+          - os: ubuntu-latest
+            triplet: x64-linux
+            configuration: 'Linux.*'
+          - os: macos-latest
+            triplet: x64-osx
+            configuration: 'Linux.*'
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+
+      - name: Set vcpkg's response file path used as part of cache's key.
+        env:
+          vcpkgResponseFile: ${{ github.workspace }}/cmakesettings.json/vcpkg_${{ matrix.triplet }}.txt
+        run: |
+          echo "::set-env name=vcpkgResponseFile::$vcpkgResponseFile"
+        shell: bash
+
+      - name: Cache vcpkg artifacts
+        uses: actions/cache@v1
+        with:
+          path: ${{ github.workspace }}/vcpkg/
+          key: ${{ hashFiles( env.vcpkgResponseFile ) }}-${{ hashFiles('.git/modules/vcpkg/HEAD') }}-${{ runner.os }}
+
+      - name: dir
+        run: find ${{ runner.workspace }}
+        if: "!contains( matrix.os, 'windows')"
+      - name: dir
+        run: gci -recurse ${{ runner.workspace }}
+        if: contains( matrix.os, 'windows')
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@v0
+        id: runvcpkg
+        with:
+          vcpkgArguments: '@${{ env.vcpkgResponseFile }}'
+          vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+      - name: Prints output of run-vcpkg's task
+        run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET }}' "
+
+      - name: 'CMake+Makefiles'
+        uses: lukka/run-cmake@v0
+        if: contains( matrix.os, 'windows') == false
+        with:
+          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakesettings.json/CMakeLists.txt'
+          useVcpkgToolchainFile: true
+          buildDirectory: '${{ runner.workspace }}/b//unixmakefiles'
+          cmakeAppendedArgs: '-G "Unix Makefiles" '
+      - name: 'CMake+XCode'
+        uses: lukka/run-cmake@v0
+        if: contains( matrix.os, 'macos')
+        with:
+          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakesettings.json/CMakeLists.txt'
+          useVcpkgToolchainFile: true
+          buildDirectory: '${{ runner.workspace }}/b/xcode'
+          cmakeAppendedArgs: '-G Xcode'
+      - name: 'CMake+Ninja'
+        uses: lukka/run-cmake@v0
+        with:
+          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakesettings.json/CMakeLists.txt'
+          useVcpkgToolchainFile: true
+          buildDirectory: '${{ runner.workspace }}/ninja'
+          cmakeAppendedArgs: '-G "Ninja"'
+      - name: 'CMakeSettings.json'
+        uses: lukka/run-cmake@v0
+        with:
+          cmakeListsOrSettingsJson: CMakeSettingsJson
+          cmakeSettingsJsonPath: '${{ github.workspace }}/cmakesettings.json/CMakeSettings.json'
+          useVcpkgToolchainFile: true
+          configurationRegexFilter: '${{ matrix.configuration }}'
+
+      # clean out the vcpkg content that must not be cached. //?? This should not be needed if the 'cache' action would allow to filter the files to be cached!
+      - name: clean vcpkg artifact that must not be cached
+        run: |
+          rm -rfv ${{ github.workspace }}/vcpkg/buildtrees
+          rm -rfv ${{ github.workspace }}/vcpkg/packages
+          rm -rfv ${{ github.workspace }}/vcpkg/downloads
+        shell: bash
+      - name: dir
+        run: find ${{ runner.workspace }}
+        if: "!contains( matrix.os, 'windows')"
+      - name: dir
+        run: gci -recurse ${{ runner.workspace }}
+        if: contains( matrix.os, 'windows')

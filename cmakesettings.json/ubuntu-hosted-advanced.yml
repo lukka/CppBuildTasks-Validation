@@ -1,3 +1,7 @@
+# Copyright (c) 2019-2020 Luca Cappa
+# Released under the term specified in file LICENSE.txt
+# SPDX short identifier: MIT
+
 pool:
   vmImage: 'ubuntu-latest'
 
@@ -21,7 +25,7 @@ steps:
       buildDirectory: '$(Build.BinariesDirectory)/unixmakefiles'
       cmakeAppendedArgs: '-G "Unix Makefiles" '
       buildWithCMakeArgs: '-- -j'
-      vcpkgTriplet: '$(VCPKG_TRIPLET)'
+      vcpkgTriplet: '$(RUNVCPKG_VCPKG_TRIPLET)'
   - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMake+Ninja'
     inputs:

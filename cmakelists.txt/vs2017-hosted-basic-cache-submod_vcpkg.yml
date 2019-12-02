@@ -12,7 +12,7 @@ jobs:
   steps:
     - checkout: self
       submodules: recursive
-    - task: CacheBeta@0
+    - task: Cache@2
       displayName: Cache vcpkg
       inputs:
         key: $(Build.SourcesDirectory)/cmakelists.txt/vcpkg_x64-windows.txt | $(Build.SourcesDirectory)/.git/modules/vcpkg/HEAD | "$(Agent.OS)"

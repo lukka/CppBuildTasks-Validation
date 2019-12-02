@@ -22,5 +22,5 @@ jobs:
         useVcpkgToolchainFile: true
         cmakeGenerator: 'Ninja'
         buildDirectory: '$(Build.ArtifactStagingDirectory)'
-        vcpkgTriplet: '$(VCPKG_TRIPLET)'
+        vcpkgTriplet: '$(RUNVCPKG_VCPKG_TRIPLET)'
         buildWithCMakeArgs: '-- -v'

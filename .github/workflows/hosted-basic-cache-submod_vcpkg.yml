@@ -1,0 +1,74 @@
+# Copyright (c) 2019-2020 Luca Cappa
+# Released under the term specified in file LICENSE.txt
+# SPDX short identifier: MIT
+name: hosted-basic-cache-submod_vcpkg
+on: [push]
+
+jobs:
+  job:
+    name: ${{ matrix.os }}-hosted-basic-cache-submod_vcpkg
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: windows-latest
+            triplet: x64-windows
+          - os: ubuntu-latest
+            triplet: x64-linux
+          - os: macos-latest
+            triplet: x64-osx
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+
+      - name: Set vcpkg's response file path used as part of cache's key.
+        env:
+          vcpkgResponseFile: ${{ github.workspace }}/cmakelists.txt/vcpkg_${{ matrix.triplet }}.txt
+        run: |
+          echo "::set-env name=vcpkgResponseFile::$vcpkgResponseFile"
+        shell: bash
+
+      - name: Cache vcpkg artifacts
+        uses: actions/cache@v1
+        with:
+          path: ${{ github.workspace }}/vcpkg
+          key: ${{ hashFiles( env.vcpkgResponseFile ) }}-${{ hashFiles('.git/modules/vcpkg/HEAD') }}-${{ runner.os }}
+      - name: dir
+        run: find ${{ runner.workspace }}
+        if: "!contains( matrix.os, 'windows')"
+      - name: dir
+        run: gci -recurse ${{ runner.workspace }}
+        if: contains( matrix.os, 'windows')
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@v0
+        id: runvcpkg
+        with:
+          vcpkgArguments: '@${{ env.vcpkgResponseFile }}'
+          vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+      - name: Run CMake with Ninja
+        uses: lukka/run-cmake@v0
+        id: runcmake
+        with:
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'
+          useVcpkgToolchainFile: true
+          buildWithCMakeArgs: '-- -v'
+      - name: Prints output of run-vcpkg's task
+        run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET }}' "
+
+      # clean out the vcpkg content that must not be cached. //?? This should not be needed if the 'cache' action would allow to filter file to be cached!
+      - name: clean vcpkg artifact that must not be cached
+        run: |
+          rm -rfv ${{ github.workspace }}/vcpkg/buildtrees
+          rm -rfv ${{ github.workspace }}/vcpkg/packages
+          rm -rfv ${{ github.workspace }}/vcpkg/downloads
+        shell: bash
+      - name: dir
+        run: find ${{ runner.workspace }}
+        if: "!contains( matrix.os, 'windows')"
+      - name: dir
+        run: gci -recurse ${{ runner.workspace }}
+        if: contains( matrix.os, 'windows')
+

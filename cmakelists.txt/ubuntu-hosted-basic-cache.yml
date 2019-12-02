@@ -6,14 +6,14 @@ jobs:
 
   variables:
     system.debug: true
-    vcpkgGitRef: 36d276a19af03210c3fffcdee844b32b9b65334e
+    vcpkgGitRef: 2019.12
 
   steps:
-    - task: CacheBeta@0
+    - task: Cache@2
       displayName: Cache vcpkg
       inputs:
         key: $(Build.SourcesDirectory)/cmakelists.txt/vcpkg_x64-linux.txt | "$(vcpkgGitRef)" | "$(Agent.OS)"
-        path: '$(Build.SourcesDirectory)/vcpkg'
+        path: '$(Build.BinariesDirectory)/vcpkg'
     - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
       displayName: 'Run vcpkg'
       inputs:

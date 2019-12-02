@@ -13,7 +13,7 @@ jobs:
     - checkout: self
       submodules: recursive
     - template: ../templates/install-gcc-macos.yml
-    - task: CacheBeta@0
+    - task: Cache@2
       displayName: Cache vcpkg
       inputs:
         key: $(Build.SourcesDirectory)/cmakelists.txt/vcpkg_x64-osx.txt | "$(Agent.OS)" | $(Build.SourcesDirectory)/.git/modules/vcpkg/HEAD | "gcc"

@@ -6,10 +6,11 @@ jobs:
 
   variables:
     system.debug: true
-    vcpkgGitRef: 36d276a19af03210c3fffcdee844b32b9b65334e
+    #2019.12
+    vcpkgGitRef: c7dfd5f83fe4f652d49d54e9193d5f6934aa16aa
 
   steps:
-    - task: CacheBeta@0
+    - task: Cache@2
       displayName: Cache vcpkg
       inputs:
         key: $(Build.SourcesDirectory)/cmakelists.txt/vcpkg_x64-windows.txt | "$(vcpkgGitRef)" | "$(Agent.OS)"

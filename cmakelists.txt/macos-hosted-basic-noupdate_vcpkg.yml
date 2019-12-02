@@ -1,0 +1,47 @@
+resources:
+  repositories:
+  - repository: vcpkg
+    type: github
+    name: microsoft/vcpkg
+    endpoint: vcpkg
+    ref: refs/tags/2019.12
+
+jobs:
+
+- job: macos_hosted
+  pool:
+    vmImage: 'macOS-10.14'
+    
+  variables:
+    vcpkgPackages: 'sqlite3'
+    system.debug: true
+    thisRepo: 'CppBuildTasks-Validation'
+
+  steps:
+    - checkout: self
+      submodules: recursive
+    - checkout: vcpkg
+    - template: ../templates/install-gcc-macos.yml
+    - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+      displayName: 'Run vcpkg on the submodule without updating'
+      inputs:
+        vcpkgTriplet: 'x64-osx'
+        vcpkgArguments: '$(vcpkgPackages)'
+        vcpkgDirectory: '$(Build.SourcesDirectory)/$(thisRepo)/vcpkg'
+        cleanAfterBuild: true
+        doNotUpdateVcpkg: true
+    - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+      displayName: 'Run vcpkg on the directory (indipendently check-ed out) with no update'
+      inputs:
+        vcpkgTriplet: 'x64-osx'
+        vcpkgArguments: '$(vcpkgPackages)'
+        vcpkgDirectory: '$(Build.SourcesDirectory)/vcpkg'
+        cleanAfterBuild: true
+        doNotUpdateVcpkg: true
+    - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+      displayName: 'Run CMake with Ninja'
+      inputs:
+        cmakeListsTxtPath: '$(thisRepo)/cmakelists.txt/CMakeLists.txt'
+        useVcpkgToolchainFile: true
+        buildWithCMakeArgs: '-- -v'
+

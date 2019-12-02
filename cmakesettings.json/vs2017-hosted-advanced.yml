@@ -1,15 +1,20 @@
+# Copyright (c) 2019-2020 Luca Cappa
+# Released under the term specified in file LICENSE.txt
+# SPDX short identifier: MIT
+
 pool:
   vmImage: vs2017-win2016
   
 variables:
   vcpkgPackages: 'sqlite3'
   system.debug: true
+  vcpkgGitCommitId: 2019.11
 
 steps:
   - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
     displayName: 'Run vcpkg'
     inputs:
-      vcpkgGitCommitId: master
+      vcpkgGitCommitId: $(vcpkgGitCommitId)
       vcpkgTriplet: 'x64-windows'
       vcpkgArguments: '$(vcpkgPackages)'
   - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0

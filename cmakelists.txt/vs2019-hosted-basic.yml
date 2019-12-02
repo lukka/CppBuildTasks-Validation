@@ -19,5 +19,5 @@ jobs:
       inputs:
         cmakeListsTxtPath: 'cmakelists.txt/CMakeLists.txt'
         useVcpkgToolchainFile: true
-        vcpkgTriplet: '$(VCPKG_TRIPLET)'
+        vcpkgTriplet: '$(RUNVCPKG_VCPKG_TRIPLET)'
         buildWithCMakeArgs: '-- -v'
