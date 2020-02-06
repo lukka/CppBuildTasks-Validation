@@ -59,10 +59,10 @@ jobs:
           #-${{ hashFiles('${{ runner.workspace }}/cmakesettings.json/vcpkg_x64.txt') }}-${{ hashFiles('${{ runner.workspace }}/.git/modules/vcpkg/HEAD') }}
       - name: dir
         run: find ${{ runner.workspace }}
-        if: "!contains( matrix.os, 'windows')"
+        if: "!contains( runner.os, 'windows')"
       - name: dir
         run: gci -recurse ${{ runner.workspace }}
-        if: contains( matrix.os, 'windows')
+        if: contains( runner.os, 'windows')
       - name: Run vcpkg
         uses: lukka/run-vcpkg@dev
         id: runvcpkg
