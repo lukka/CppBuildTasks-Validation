@@ -48,6 +48,7 @@ jobs:
           vcpkgArguments: '${{ matrix.vcpkgPackages }}'
           vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
           vcpkgTriplet: '${{ matrix.triplet }}'
+          vcpkgGitCommitId: '${{ matrix.vcpkgCommitId}}'
       - name: Prints output of run-vcpkg's task
         run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
       - name: Run CMake+Ninja
