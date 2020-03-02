@@ -43,13 +43,13 @@ jobs:
         run: gci -recurse ${{ runner.workspace }}
         if: contains( matrix.os, 'windows')
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@dev
+        uses: lukka/run-vcpkg@master
         id: runvcpkg
         with:
           vcpkgArguments: '@${{ env.vcpkgResponseFile }}'
           vcpkgDirectory: '${{ github.workspace }}/vcpkg'
       - name: Run CMake with Ninja
-        uses: lukka/run-cmake@dev
+        uses: lukka/run-cmake@master
         id: runcmake
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'

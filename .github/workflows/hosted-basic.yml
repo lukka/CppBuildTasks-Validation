@@ -38,7 +38,7 @@ jobs:
         run: gci -recurse ${{ runner.workspace }}
         if: contains( matrix.os, 'windows')
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@dev
+        uses: lukka/run-vcpkg@master
         id: runvcpkg
         with:
           vcpkgArguments: '${{ matrix.vcpkgPackages }}'
@@ -46,7 +46,7 @@ jobs:
       - name: Prints outputs of run-vcpkg task
         run: echo "'${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}' '${{  steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
       - name: Run CMake+Ninja without triplet
-        uses: lukka/run-cmake@dev
+        uses: lukka/run-cmake@master
         id: runcmake
         with:
           cmakeGenerator: 'Ninja'  
@@ -56,7 +56,7 @@ jobs:
           buildWithCMakeArgs: '-- -v'
           buildDirectory: '${{ runner.workspace }}/b/ninja/'
       - name: Run CMake+Ninja with triplet
-        uses: lukka/run-cmake@dev
+        uses: lukka/run-cmake@master
         id: runcmake2
         with:
           cmakeGenerator: 'Ninja'  

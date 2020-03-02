@@ -15,17 +15,26 @@ jobs:
       inputs:
         key: $(Build.SourcesDirectory)/cmakelists.txt/vcpkg_x64-windows.txt | "$(vcpkgGitRef)" | "$(Agent.OS)"
         path: '$(Build.BinariesDirectory)/vcpkg'
-    - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+    - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
       displayName: 'Run vcpkg'
       inputs:
         vcpkgArguments: '@$(Build.SourcesDirectory)/cmakelists.txt/vcpkg_x64-windows.txt'
         vcpkgGitCommitId: $(vcpkgGitRef)
         vcpkgGitURL: https://github.com/lukka/vcpkg.git
-    - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
       displayName: 'Run CMake with Ninja'
       inputs:
         cmakeListsTxtPath: 'cmakelists.txt/CMakeLists.txt'
         useVcpkgToolchainFile: true
         vcpkgTriplet: '$(RUNVCPKG_VCPKG_TRIPLET)'
         buildWithCMakeArgs: '-- -v'
+    - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+      displayName: 'Run CMake with Visual Studio'
+      inputs:
+        cmakeListsTxtPath: 'cmakelists.txt/CMakeLists.txt'
+        useVcpkgToolchainFile: true
+        buildDirectory: '$(Build.BinariesDirectory)/vs2019'
+        vcpkgTriplet: '$(RUNVCPKG_VCPKG_TRIPLET)'
+        buildWithCMakeArgs: '-- -ds'
+        cmakeGenerator: VS16Win64
 

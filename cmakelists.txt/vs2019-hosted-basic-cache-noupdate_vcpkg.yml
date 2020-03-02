@@ -28,7 +28,7 @@ jobs:
       inputs:
         key: $(Build.SourcesDirectory)/$(thisRepo)/cmakelists.txt/vcpkg_x64-windows.txt | "$(vcpkgGitRef)" | "$(Agent.OS)"
         path: '$(Build.SourcesDirectory)/vcpkg'
-    - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+    - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
       displayName: 'Run vcpkg on the submodule without updating'
       inputs:
         # vcpkgTriplet: $(vcpkgTriplet) This is not needed as it is extracted by the response file anyway.
@@ -36,7 +36,7 @@ jobs:
         vcpkgDirectory: '$(Build.SourcesDirectory)/$(thisRepo)/vcpkg'
         cleanAfterBuild: true
         doNotUpdateVcpkg: true
-    - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+    - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
       displayName: 'Run vcpkg on the directory (indipendently check-ed out) without updating'
       inputs:
         vcpkgArguments: '@$(Build.SourcesDirectory)/$(thisRepo)/cmakelists.txt/vcpkg_x64-windows.txt'
@@ -44,13 +44,13 @@ jobs:
         cleanAfterBuild: true
         doNotUpdateVcpkg: true
 
-    - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
       displayName: 'Run CMake with Visual Studio Generator -  Release Configuration'
       inputs:
         cmakeListsTxtPath: '$(thisRepo)/cmakelists.txt/CMakeLists.txt'
         useVcpkgToolchainFile: true
         buildDirectory: '$(Build.ArtifactStagingDirectory)'
         buildWithCMakeArgs: ' --config Release -- /verbosity:detailed'
-        configurationType: Release
+        cmakeBuildType: Release
         cmakeGenerator: VS16Win64
 

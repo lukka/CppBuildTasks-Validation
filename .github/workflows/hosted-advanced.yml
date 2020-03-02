@@ -42,7 +42,7 @@ jobs:
         if: contains( matrix.os, 'windows')
 
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@dev
+        uses: lukka/run-vcpkg@master
         id: runvcpkg
         with:
           vcpkgArguments: '${{ matrix.vcpkgPackages }}'
@@ -52,7 +52,7 @@ jobs:
       - name: Prints output of run-vcpkg's task
         run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
       - name: Run CMake+Ninja
-        uses: lukka/run-cmake@dev
+        uses: lukka/run-cmake@master
         id: runcmake
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'
@@ -61,7 +61,7 @@ jobs:
           buildDirectory: '${{ runner.workspace }}/b/ninja/'
           cmakeAppendedArgs: '-G Ninja '
       - name: Run CMake+VS
-        uses: lukka/run-cmake@dev
+        uses: lukka/run-cmake@master
         if: contains( matrix.os, 'windows')
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
@@ -70,7 +70,7 @@ jobs:
           buildDirectory: '${{ runner.workspace }}/b/vs16'
           cmakeAppendedArgs: '-G "Visual Studio 16 2019" -A x64'
       - name: 'Run CMake with CMakeSettings.json'
-        uses: lukka/run-cmake@dev
+        uses: lukka/run-cmake@master
         with:
           cmakeListsOrSettingsJson: CMakeSettingsJson
           cmakeSettingsJsonPath: '${{ github.workspace }}/cmakesettings.json/CMakeSettings.json'

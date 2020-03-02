@@ -10,13 +10,13 @@ jobs:
     vcpkgCommitId: 2a0998e5cfada91f19484171f8005eb08b87136b
 
   steps:
-    - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+    - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
       displayName: 'Run vcpkg'
       inputs:
         vcpkgTriplet: 'x64-windows'
         vcpkgArguments: '$(vcpkgPackages)'
         vcpkgGitCommitId: $(vcpkgCommitId)
-    - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
       displayName: 'Run CMake with Ninja'
       inputs:
         cmakeListsTxtPath: 'cmakelists.txt/CMakeLists.txt'
