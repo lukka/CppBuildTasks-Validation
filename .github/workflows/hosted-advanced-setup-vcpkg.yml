@@ -89,12 +89,12 @@ jobs:
         uses: lukka/run-cmake@add_shell_support
         id: runcmake
         with:
-          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
           cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'
+          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
           useVcpkgToolchainFile: true
           buildWithCMakeArgs: '-- -v'
           buildDirectory: '${{ runner.workspace }}/b/ninja/'
-          cmakeAppendedArgs: '-G Ninja -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_DEFAULT_TRIPLET }}'
+          cmakeAppendedArgs: '-GNinja -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_DEFAULT_TRIPLET }}'
       - name: Run CMake+VS
         uses: lukka/run-cmake@add_shell_support
         if: contains( matrix.os, 'windows')
@@ -103,7 +103,7 @@ jobs:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'
           useVcpkgToolchainFile: true
           buildDirectory: '${{ runner.workspace }}/b/vs16'
-          cmakeAppendedArgs: '-G "Visual Studio 16 2019" -A x64 -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_DEFAULT_TRIPLET }} '
+          cmakeAppendedArgs: '"-GVisual Studio 16 2019" -Ax64 -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_DEFAULT_TRIPLET }} '
       - name: 'Run CMake with CMakeSettings.json'
         uses: lukka/run-cmake@add_shell_support
         with:
