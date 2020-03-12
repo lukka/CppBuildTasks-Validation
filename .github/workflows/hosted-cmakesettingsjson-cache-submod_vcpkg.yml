@@ -28,17 +28,15 @@ jobs:
           submodules: true
 
       - name: Set vcpkg's response file path used as part of cache's key.
-        env:
-          vcpkgResponseFile: ${{ github.workspace }}/cmakesettings.json/vcpkg_${{ matrix.triplet }}.txt
-        run: |
-          echo "::set-env name=vcpkgResponseFile::$vcpkgResponseFile"
-        shell: bash
-
+        uses: lukka/set-shell-env@v0
+        with:
+          VCPKGRESPONSEFILE: ${{ github.workspace }}/cmakesettings.json/vcpkg_${{ matrix.triplet }}.txt
+          filter: VCPKGRESPONSEFILE
       - name: Cache vcpkg's artifacts
         uses: actions/cache@v1
         with:
           path: ${{ github.workspace }}/vcpkg/
-          key: ${{ hashFiles( env.vcpkgResponseFile ) }}-${{ hashFiles('.git/modules/vcpkg/HEAD') }}-${{ runner.os }}
+          key: ${{ hashFiles( env.VCPKGRESPONSEFILE ) }}-${{ hashFiles('.git/modules/vcpkg/HEAD') }}-${{ runner.os }}
 
       - name: dir
         run: find ${{ runner.workspace }}
@@ -47,42 +45,42 @@ jobs:
         run: gci -recurse ${{ runner.workspace }}
         if: contains( matrix.os, 'windows')
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@master
+        uses: lukka/run-vcpkg@add_shell_support
         id: runvcpkg
         with:
-          vcpkgArguments: '@${{ env.vcpkgResponseFile }}'
+          vcpkgArguments: '@${{ env.VCPKGRESPONSEFILE }}'
           vcpkgDirectory: '${{ github.workspace }}/vcpkg'
       - name: Prints output of run-vcpkg's task
         run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
 
       - name: 'CMake+Makefiles'
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@add_shell_support
         if: contains( matrix.os, 'windows') == false
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
           cmakeListsTxtPath: '${{ github.workspace }}/cmakesettings.json/CMakeLists.txt'
           useVcpkgToolchainFile: true
           buildDirectory: '${{ runner.workspace }}/b//unixmakefiles'
-          cmakeAppendedArgs: '-G "Unix Makefiles" '
-      - name: 'CMake+XCode'
-        uses: lukka/run-cmake@master
+          cmakeAppendedArgs: '-G"Unix Makefiles"'
+      - name: 'CMake+XCode CMakeListsTxtAdvanced'
+        uses: lukka/run-cmake@add_shell_support
         if: contains( matrix.os, 'macos')
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
           cmakeListsTxtPath: '${{ github.workspace }}/cmakesettings.json/CMakeLists.txt'
           useVcpkgToolchainFile: true
           buildDirectory: '${{ runner.workspace }}/b/xcode'
-          cmakeAppendedArgs: '-G Xcode'
-      - name: 'CMake+Ninja'
-        uses: lukka/run-cmake@master
+          cmakeAppendedArgs: '-GXcode'
+      - name: 'CMake+Ninja CMakeListsTxtAdvanced'
+        uses: lukka/run-cmake@add_shell_support
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
           cmakeListsTxtPath: '${{ github.workspace }}/cmakesettings.json/CMakeLists.txt'
           useVcpkgToolchainFile: true
           buildDirectory: '${{ runner.workspace }}/ninja'
-          cmakeAppendedArgs: '-G "Ninja"'
+          cmakeAppendedArgs: '-GNinja'
       - name: 'CMakeSettings.json'
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@add_shell_support
         with:
           cmakeListsOrSettingsJson: CMakeSettingsJson
           cmakeSettingsJsonPath: '${{ github.workspace }}/cmakesettings.json/CMakeSettings.json'

@@ -38,7 +38,7 @@ jobs:
         run: gci -recurse ${{ runner.workspace }}
         if: contains( matrix.os, 'windows')
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@master
+        uses: lukka/run-vcpkg@add_shell_support
         id: runvcpkg
         with:
           vcpkgArguments: '${{ matrix.vcpkgPackages }}'
@@ -46,7 +46,7 @@ jobs:
       - name: Prints outputs of run-vcpkg task
         run: echo "'${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}' '${{  steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
       - name: Run CMake+Ninja without triplet
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@add_shell_support
         id: runcmake
         with:
           cmakeGenerator: 'Ninja'  
@@ -55,9 +55,9 @@ jobs:
           useVcpkgToolchainFile: true
           buildWithCMakeArgs: '-- -v'
           buildDirectory: '${{ runner.workspace }}/b/ninja/'
-      - name: Run CMake+Ninja with triplet
-        uses: lukka/run-cmake@master
-        id: runcmake2
+      - name: Run CMake+Ninja with triplet (cmd)
+        uses: lukka/run-cmake@add_shell_support
+        id: runcmake_cmd
         with:
           cmakeGenerator: 'Ninja'  
           cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
@@ -66,3 +66,16 @@ jobs:
           buildWithCMakeArgs: '-- -v'
           vcpkgTriplet: ${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}
           buildDirectory: '${{ runner.workspace }}/b/ninja/'
+      - name: Run CMake+Ninja with triplet (bash)
+        if: false
+        uses: lukka/run-cmake@add_shell_support
+        id: runcmake_bash
+        with:
+          cmakeGenerator: 'Ninja'  
+          cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'
+          useVcpkgToolchainFile: true
+          buildWithCMakeArgs: '-- -v'
+          vcpkgTriplet: ${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}
+          buildDirectory: '${{ runner.workspace }}/b/ninja-bash/'
+          useShell: bash

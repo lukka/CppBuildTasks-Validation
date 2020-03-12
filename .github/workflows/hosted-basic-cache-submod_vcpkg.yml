@@ -25,17 +25,15 @@ jobs:
           submodules: true
 
       - name: Set vcpkg's response file path used as part of cache's key.
-        env:
-          vcpkgResponseFile: ${{ github.workspace }}/cmakelists.txt/vcpkg_${{ matrix.triplet }}.txt
-        run: |
-          echo "::set-env name=vcpkgResponseFile::$vcpkgResponseFile"
-        shell: bash
+        uses: lukka/set-shell-env@v0
+        with:
+          VCPKGRESPONSEFILE: ${{ github.workspace }}/cmakelists.txt/vcpkg_${{ matrix.triplet }}.txt
 
       - name: Cache vcpkg artifacts
         uses: actions/cache@v1
         with:
           path: ${{ github.workspace }}/vcpkg
-          key: ${{ hashFiles( env.vcpkgResponseFile ) }}-${{ hashFiles('.git/modules/vcpkg/HEAD') }}-${{ runner.os }}
+          key: ${{ hashFiles( env.VCPKGRESPONSEFILE ) }}-${{ hashFiles('.git/modules/vcpkg/HEAD') }}-${{ runner.os }}
       - name: dir
         run: find ${{ runner.workspace }}
         if: "!contains( matrix.os, 'windows')"
@@ -43,13 +41,13 @@ jobs:
         run: gci -recurse ${{ runner.workspace }}
         if: contains( matrix.os, 'windows')
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@master
+        uses: lukka/run-vcpkg@add_shell_support
         id: runvcpkg
         with:
-          vcpkgArguments: '@${{ env.vcpkgResponseFile }}'
+          vcpkgArguments: '@${{ env.VCPKGRESPONSEFILE }}'
           vcpkgDirectory: '${{ github.workspace }}/vcpkg'
       - name: Run CMake with Ninja
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@add_shell_support
         id: runcmake
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'
