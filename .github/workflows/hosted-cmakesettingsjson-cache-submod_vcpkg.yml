@@ -45,7 +45,7 @@ jobs:
         run: gci -recurse ${{ runner.workspace }}
         if: contains( matrix.os, 'windows')
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@add_shell_support
+        uses: lukka/run-vcpkg@master
         id: runvcpkg
         with:
           vcpkgArguments: '@${{ env.VCPKGRESPONSEFILE }}'
@@ -54,7 +54,7 @@ jobs:
         run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
 
       - name: 'CMake+Makefiles'
-        uses: lukka/run-cmake@add_shell_support
+        uses: lukka/run-cmake@master
         if: contains( matrix.os, 'windows') == false
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
@@ -63,7 +63,7 @@ jobs:
           buildDirectory: '${{ runner.workspace }}/b//unixmakefiles'
           cmakeAppendedArgs: '-G"Unix Makefiles"'
       - name: 'CMake+XCode CMakeListsTxtAdvanced'
-        uses: lukka/run-cmake@add_shell_support
+        uses: lukka/run-cmake@master
         if: contains( matrix.os, 'macos')
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
@@ -72,7 +72,7 @@ jobs:
           buildDirectory: '${{ runner.workspace }}/b/xcode'
           cmakeAppendedArgs: '-GXcode'
       - name: 'CMake+Ninja CMakeListsTxtAdvanced'
-        uses: lukka/run-cmake@add_shell_support
+        uses: lukka/run-cmake@master
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
           cmakeListsTxtPath: '${{ github.workspace }}/cmakesettings.json/CMakeLists.txt'
@@ -80,7 +80,7 @@ jobs:
           buildDirectory: '${{ runner.workspace }}/ninja'
           cmakeAppendedArgs: '-GNinja'
       - name: 'CMakeSettings.json'
-        uses: lukka/run-cmake@add_shell_support
+        uses: lukka/run-cmake@master
         with:
           cmakeListsOrSettingsJson: CMakeSettingsJson
           cmakeSettingsJsonPath: '${{ github.workspace }}/cmakesettings.json/CMakeSettings.json'
