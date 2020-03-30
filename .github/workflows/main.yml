@@ -1,9 +1,8 @@
-# https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions
+# Copyright (c) 2019-2020 Luca Cappa
+# Released under the term specified in file LICENSE.txt
+# SPDX short identifier: MIT
 name: main
 on: [push]
-
-# enable debug with secrets: 
-# https://github.com/actions/toolkit/blob/2c6d31be8f9c8201d3cc9384133b933543b69075/docs/action-debugging.md
 
 jobs:
   job:
@@ -22,7 +21,6 @@ jobs:
           - os: macos-latest
             triplet: x64-osx
     steps:
-      # https://github.com/actions/checkout
       - uses: actions/checkout@v1
         with:
           submodules: true
@@ -50,13 +48,11 @@ jobs:
         env:
           MATRIX_CONTEXT: ${{ toJson(matrix) }}
         run: echo "$MATRIX_CONTEXT"
-      # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/caching-dependencies-to-speed-up-workflows
       - name: Cache vcpkg artifacts
         uses: actions/cache@v1
         with:
           path: ${{ github.workspace }}/../b/vcpkg
           key: ${{ runner.OS }}-${{ env.vcpkgCommitId }}
-          #-${{ hashFiles('${{ runner.workspace }}/cmakesettings.json/vcpkg_x64.txt') }}-${{ hashFiles('${{ runner.workspace }}/.git/modules/vcpkg/HEAD') }}
       - name: dir
         run: find ${{ runner.workspace }}
         if: "!contains( runner.os, 'windows')"
@@ -67,7 +63,6 @@ jobs:
         uses: lukka/run-vcpkg@add_shell_support
         id: runvcpkg
         with:
-          # Member field access: https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions
           vcpkgArguments: '@${{ github.workspace }}/cmakesettings.json/vcpkg_x64.txt --triplet ${{ matrix.triplet }}'
           vcpkgDirectory: ${{ github.workspace }}/../b/vcpkg
           vcpkgGitCommitId: ${{ env.vcpkgGitCommitId }}
