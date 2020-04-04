@@ -34,12 +34,13 @@ jobs:
         with:
           submodules: true
 
+      - uses: lukka/get-cmake@v2
       - name: dir
-        run: find ${{ runner.workspace }}
-        if: "!contains( matrix.os, 'windows')"
+        run: find $RUNNER_TEMP
+        shell: bash
       - name: dir
-        run: gci -recurse ${{ runner.workspace }}
-        if: contains( matrix.os, 'windows')
+        run: find $RUNNER_WORKSPACE
+        shell: bash
       - name: Setup vcpkg (do not install any package)
         uses: lukka/run-vcpkg@master
         id: runvcpkg
@@ -65,6 +66,15 @@ jobs:
       - name: Prints output of ANDROID_SDK_ROOT and ANDROID_HOME env var
         run: echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT ANDROID_HOME=$ANDROID_HOME"
         shell: bash
+      - name: Run CMake with Ninja Multi-Config
+        uses: lukka/run-cmake@master
+        with:
+          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'
+          useVcpkgToolchainFile: true
+          buildDirectory: '${{ runner.workspace }}/b/ninjaMultiConfig'
+          cmakeAppendedArgs: '"-GNinja Multi-Config" -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_DEFAULT_TRIPLET }} '
+          buildWithCMake: true
       - name: Run CMake+EnvVar (Un*x)
         if: "!contains( matrix.os, 'windows')"
         uses: lukka/run-cmake@master
