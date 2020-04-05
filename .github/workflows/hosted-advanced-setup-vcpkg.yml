@@ -34,7 +34,7 @@ jobs:
         with:
           submodules: true
 
-      - uses: lukka/get-cmake@v2
+      - uses: lukka/get-cmake@master
       - name: dir
         run: find $RUNNER_TEMP
         shell: bash
@@ -49,7 +49,7 @@ jobs:
           vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
           vcpkgGitCommitId: '${{ matrix.vcpkgCommitId}}'
       - name: Set vcpkg's response file path used as part of cache's key.
-        uses: lukka/set-shell-env@v0
+        uses: lukka/set-shell-env@master
         with:
           VCPKGRESPONSEFILE: ${{ github.workspace }}/cmakelists.txt/vcpkg_${{ matrix.triplet }}.txt
           VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}

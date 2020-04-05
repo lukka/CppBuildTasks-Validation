@@ -27,8 +27,9 @@ jobs:
         with:
           submodules: true
 
+      - uses: lukka/get-cmake@master
       - name: Set vcpkg's response file path used as part of cache's key.
-        uses: lukka/set-shell-env@v0
+        uses: lukka/set-shell-env@master
         with:
           VCPKGRESPONSEFILE: ${{ github.workspace }}/cmakesettings.json/vcpkg_${{ matrix.triplet }}.txt
           filter: VCPKGRESPONSEFILE
