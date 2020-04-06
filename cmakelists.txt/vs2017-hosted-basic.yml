@@ -7,7 +7,7 @@ jobs:
   variables:
     vcpkgPackages: 'sqlite3'
     system.debug: true
-    vcpkgCommitId: 2a0998e5cfada91f19484171f8005eb08b87136b
+    vcpkgCommitId: 0591528cbfde14ccfd3900c3fb19aba382c05349
   steps:
     - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
       displayName: 'Run vcpkg'

@@ -2,7 +2,7 @@ variables:
   vcpkgPackages: 'sqlite3'
   system.debug: true
   thisRepo: 'CppBuildTasks-Validation'
-  vcpkgGitRef: 2019.10
+  vcpkgGitCommitId: 2019.10
   vcpkgTriplet: 'x64-osx' # Needed as the triplet is not specified on the command line.
 
 resources:
@@ -11,7 +11,7 @@ resources:
     type: github
     name: microsoft/vcpkg
     endpoint: vcpkg
-    ref: refs/tags/$(vcpkgGitRef)
+    ref: refs/tags/$(vcpkgGitCommitId)
 
 jobs:
 
@@ -28,7 +28,7 @@ jobs:
     - task: Cache@2
       displayName: Cache vcpkg
       inputs:
-        key: $(vcpkgPackages) | "$(vcpkgGitRef)" | "$(Agent.OS)"
+        key: $(vcpkgPackages) | "$(vcpkgGitCommitId)" | "$(Agent.OS)"
         path: '$(Build.SourcesDirectory)/vcpkg'
     - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
       displayName: 'Run vcpkg on the submodule without updating'

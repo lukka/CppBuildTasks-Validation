@@ -1,13 +1,13 @@
 # Copyright (c) 2019-2020 Luca Cappa
 # Released under the term specified in file LICENSE.txt
 # SPDX short identifier: MIT
-name: main
+name: main-autocache
 on: [push]
 
 jobs:
   job:
     env:
-      vcpkgGitCommitId: '2019.10'
+      vcpkgGitCommitId: '0591528cbfde14ccfd3900c3fb19aba382c05349'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -48,26 +48,21 @@ jobs:
         env:
           MATRIX_CONTEXT: ${{ toJson(matrix) }}
         run: echo "$MATRIX_CONTEXT"
-      - name: Cache vcpkg artifacts
-        uses: actions/cache@v1
-        with:
-          path: ${{ github.workspace }}/../b/vcpkg
-          key: ${{ runner.OS }}-${{ env.vcpkgCommitId }}
       - name: dir
         run: find ${{ runner.workspace }}
         if: "!contains( runner.os, 'windows')"
       - name: dir
         run: gci -recurse ${{ runner.workspace }}
         if: contains( runner.os, 'windows')
-      - name: Run vcpkg
-        uses: lukka/run-vcpkg@master
+      - name: Run vcpkg and cache artifacts
+        uses: lukka/run-vcpkg@auto_cache
         id: runvcpkg
         with:
           vcpkgArguments: '@${{ github.workspace }}/cmakesettings.json/vcpkg_x64.txt --triplet ${{ matrix.triplet }}'
           vcpkgDirectory: ${{ github.workspace }}/../b/vcpkg
           vcpkgGitCommitId: ${{ env.vcpkgGitCommitId }}
       - name: Run CMake
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@auto_cache
         id: runcmake
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'

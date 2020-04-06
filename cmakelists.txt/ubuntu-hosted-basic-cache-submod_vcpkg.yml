@@ -7,7 +7,7 @@ jobs:
   variables:
     system.debug: true
     # Since vcpkg is a Git submodule, its commit id is stored at /.git/modules/vcpkg/HEAD.
-    # vcpkgGitRef: not needed !
+    # vcpkgGitCommitId: not needed !
 
   steps:
     - checkout: self

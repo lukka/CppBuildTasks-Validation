@@ -8,7 +8,7 @@ pool:
 variables:
   vcpkgPackages: 'sqlite3'
   system.debug: true
-  vcpkgGitCommitId: 2019.11
+  vcpkgGitCommitId: 0591528cbfde14ccfd3900c3fb19aba382c05349
 
 steps:
   - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
