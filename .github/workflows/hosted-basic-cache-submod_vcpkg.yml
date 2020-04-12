@@ -38,7 +38,7 @@ jobs:
         run: gci -recurse ${{ runner.workspace }}
         if: contains( matrix.os, 'windows')
       - name: Restore artifacts, or run vcpkg, build and cache artifacts
-        uses: lukka/run-vcpkg@auto_cache
+        uses: lukka/run-vcpkg@master
         id: runvcpkg
         with:
           vcpkgArguments: '@${{ env.VCPKGRESPONSEFILE }}'
@@ -47,7 +47,7 @@ jobs:
           appendedCacheKey: ${{ hashFiles( env.VCPKGRESPONSEFILE ) }}
 
       - name: Run CMake with Ninja
-        uses: lukka/run-cmake@auto_cache
+        uses: lukka/run-cmake@master
         id: runcmake
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'

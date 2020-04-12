@@ -39,7 +39,7 @@ jobs:
         run: gci -recurse ${{ runner.workspace }}
         if: contains( matrix.os, 'windows')
       - name: Restore artifacts, or run vcpkg, build and cache artifacts
-        uses: lukka/run-vcpkg@auto_cache
+        uses: lukka/run-vcpkg@master
         id: runvcpkg
         with:
           vcpkgArguments: '${{ matrix.vcpkgPackages }}'
@@ -49,7 +49,7 @@ jobs:
       - name: Prints outputs of run-vcpkg task
         run: echo "'${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}' '${{  steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
       - name: Run CMake+Ninja without triplet
-        uses: lukka/run-cmake@auto_cache
+        uses: lukka/run-cmake@master
         id: runcmake
         with:
           cmakeGenerator: 'Ninja'  
@@ -59,7 +59,7 @@ jobs:
           buildWithCMakeArgs: '-- -v'
           buildDirectory: '${{ runner.workspace }}/b/ninja/'
       - name: Run CMake+Ninja with triplet (cmd)
-        uses: lukka/run-cmake@auto_cache
+        uses: lukka/run-cmake@master
         id: runcmake_cmd
         with:
           cmakeGenerator: 'Ninja'  
@@ -71,7 +71,7 @@ jobs:
           buildDirectory: '${{ runner.workspace }}/b/ninja/'
       - name: Run CMake+Ninja with triplet (bash)
         if: false
-        uses: lukka/run-cmake@auto_cache
+        uses: lukka/run-cmake@master
         id: runcmake_bash
         with:
           cmakeGenerator: 'Ninja'  
