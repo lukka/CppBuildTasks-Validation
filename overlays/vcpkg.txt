@@ -1,0 +1,2 @@
+--overlay-ports=../overlays/lua
+lua[core]

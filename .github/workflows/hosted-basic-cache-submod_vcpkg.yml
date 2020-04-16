@@ -24,7 +24,7 @@ jobs:
         with:
           submodules: true
 
-      - uses: lukka/get-cmake@master
+      - uses: lukka/get-cmake@latest
       
       - name: Set vcpkg's response file path used as part of cache's key.
         uses: lukka/set-shell-env@master

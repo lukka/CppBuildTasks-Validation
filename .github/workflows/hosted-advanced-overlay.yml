@@ -1,12 +1,12 @@
-# Copyright (c) 2019-2020 Luca Cappa
+# Copyright (c) 2020 Luca Cappa
 # Released under the term specified in file LICENSE.txt
 # SPDX short identifier: MIT
-name: hosted-advanced-setup-vcpkg-autocache
+name: hosted-advanced-vcpkg-overlay
 on: [push]
 
 jobs:
   job:
-    name: ${{ matrix.os }}-hosted-advanced
+    name: ${{ matrix.os }}-hosted-advanced-overlay
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -15,18 +15,12 @@ jobs:
         include:
           - os: windows-latest
             triplet: x64-windows
-            vcpkgCommitId: '0591528cbfde14ccfd3900c3fb19aba382c05349'
-            vcpkgPackages: 'sqlite3'
             configuration: 'x64.*'
           - os: ubuntu-latest
             triplet: x64-linux
-            vcpkgCommitId: '0591528cbfde14ccfd3900c3fb19aba382c05349'
-            vcpkgPackages: 'sqlite3'
             configuration: '.*Linux.*'
           - os: macos-latest
             triplet: x64-osx
-            vcpkgCommitId: '0591528cbfde14ccfd3900c3fb19aba382c05349'
-            vcpkgPackages: 'sqlite3'
             configuration: '.*Linux.*'
 
     steps:
@@ -45,15 +39,15 @@ jobs:
         uses: lukka/set-shell-env@master
         with:
           VCPKGRESPONSEFILE: ${{ github.workspace }}/cmakelists.txt/vcpkg_${{ matrix.triplet }}.txt
+          VCPKGRESPONSEFILE_FOR_OVERLAYS: ${{ github.workspace }}/overlays/vcpkg.txt
           VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
           filter: ^VCPKG.*
-      - name: Restore artifacts, or setup vcpkg (do not install any package)
+      - name: Restore artifacts, run vcpkg using overlays
         uses: lukka/run-vcpkg@master
         id: runvcpkg
         with:
-          setupOnly: true
-          vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
-          vcpkgGitCommitId: '${{ matrix.vcpkgCommitId}}'
+          vcpkgArguments: '@${{ env.VCPKGRESPONSEFILE }} @${{ env.VCPKGRESPONSEFILE_FOR_OVERLAYS }}'
+          vcpkgDirectory: '${{ github.workspace }}/vcpkg'
           # Ensure the cache key changes any time the content of the response file changes.
           appendedCacheKey: ${{ hashFiles( env.VCPKGRESPONSEFILE ) }}
       - run: |
