@@ -11,13 +11,13 @@ variables:
   vcpkgGitCommitId: 0591528cbfde14ccfd3900c3fb19aba382c05349
 
 steps:
-  - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+  - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
     displayName: 'Run vcpkg'
     inputs:
       vcpkgGitCommitId: $(vcpkgGitCommitId)
       vcpkgTriplet: 'x64-windows'
       vcpkgArguments: '$(vcpkgPackages)'
-  - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMake+Ninja'
     inputs:
       cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
@@ -25,7 +25,7 @@ steps:
       useVcpkgToolchainFile: true
       buildDirectory: '$(Build.BinariesDirectory)/ninja'
       cmakeAppendedArgs: '-G Ninja '
-  - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMake+VS15'
     inputs:
       cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
@@ -33,7 +33,7 @@ steps:
       useVcpkgToolchainFile: true
       buildDirectory: '$(Build.BinariesDirectory)/vs15'
       cmakeAppendedArgs: '-G "Visual Studio 15 2017" -A x64'
-  - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMakeSettings.json'
     inputs:
       cmakeListsOrSettingsJson: CMakeSettingsJson

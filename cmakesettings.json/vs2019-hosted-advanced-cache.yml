@@ -15,13 +15,13 @@ steps:
     inputs:
       key: $(Build.SourcesDirectory)/cmakesettings.json/vcpkg_x64-windows.txt | "$(vcpkgGitCommitId)" | "$(Agent.OS)"
       path: '$(Build.BinariesDirectory)/vcpkg'
-  - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+  - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
     displayName: 'Run vcpkg'
     inputs:
       vcpkgArguments: '@$(Build.SourcesDirectory)/cmakesettings.json/vcpkg_x64-windows.txt'
       vcpkgGitURL: https://github.com/lukka/vcpkg.git
       vcpkgGitCommitId: $(vcpkgGitCommitId)
-  - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMake+Ninja'
     inputs:
       cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
@@ -29,21 +29,21 @@ steps:
       useVcpkgToolchainFile: true
       buildDirectory: '$(Build.BinariesDirectory)/ninja'
       cmakeAppendedArgs: '-G Ninja '
-  - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMake+VS15'
     inputs:
       cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
       cmakeListsTxtPath: '$(Build.SourcesDirectory)/cmakesettings.json/CMakeLists.txt'
       useVcpkgToolchainFile: true
       buildDirectory: '$(Build.BinariesDirectory)/vs16'
-  - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMakeSettings.json'
     inputs:
       cmakeListsOrSettingsJson: CMakeSettingsJson
       cmakeSettingsJsonPath: 'cmakesettings.json/CMakeSettings.json'
       useVcpkgToolchainFile: true
       configurationRegexFilter: 'x64-Release'
-  - task: lucappa.cmake-ninja-vcpkg-tasks-dev.a2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
     displayName: 'CMakeSettings.json'
     inputs:
       cmakeListsOrSettingsJson: CMakeSettingsJson
