@@ -1,0 +1,30 @@
+jobs:
+
+- job: ubuntu_hosted
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  variables:
+    system.debug: true
+    vcpkgCommitId: 0591528cbfde14ccfd3900c3fb19aba382c05349
+
+  steps:
+    - task: Cache@2
+      displayName: Cache vcpkg
+      inputs:
+        key: $(Build.SourcesDirectory)/cmakeliststxt/vcpkg_x64-linux.txt | "$(vcpkgCommitId)" | "$(Agent.OS)"
+        path: '$(Build.BinariesDirectory)/vcpkg'
+    - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+      displayName: 'Run vcpkg'
+      inputs:
+        vcpkgArguments: '@$(Build.SourcesDirectory)/cmakeliststxt/vcpkg_x64-linux.txt'
+        vcpkgGitCommitId: $(vcpkgCommitId)
+        vcpkgGitURL: https://github.com/lukka/vcpkg.git
+    - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+      displayName: 'Run CMake with Ninja'
+      inputs:
+        cmakeListsTxtPath: 'cmakeliststxt/CMakeLists.txt'
+        useVcpkgToolchainFile: true
+        buildWithCMakeArgs: '-- -v'
+        ninjaDownloadUrl: https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip
+

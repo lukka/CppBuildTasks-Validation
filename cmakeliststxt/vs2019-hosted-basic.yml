@@ -1,0 +1,25 @@
+jobs:
+
+- job: vs2019_hosted
+  pool:
+    name: Hosted Windows 2019 with VS2019
+
+  variables:
+    vcpkgPackages: 'sqlite3'
+    system.debug: true
+    vcpkgCommitId: 0591528cbfde14ccfd3900c3fb19aba382c05349
+
+  steps:
+    - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+      displayName: 'Run vcpkg'
+      inputs:
+        vcpkgTriplet: 'x64-windows'
+        vcpkgArguments: '$(vcpkgPackages)'
+        vcpkgGitCommitId: $(vcpkgCommitId)
+    - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+      displayName: 'Run CMake with Ninja'
+      inputs:
+        cmakeListsTxtPath: 'cmakeliststxt/CMakeLists.txt'
+        useVcpkgToolchainFile: true
+        vcpkgTriplet: '$(RUNVCPKG_VCPKG_TRIPLET)'
+        buildWithCMakeArgs: '-- -v'

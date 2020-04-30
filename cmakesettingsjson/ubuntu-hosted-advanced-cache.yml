@@ -1,0 +1,72 @@
+# Copyright (c) 2019-2020 Luca Cappa
+# Released under the term specified in file LICENSE.txt
+# SPDX short identifier: MIT
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  system.debug: true
+  vcpkgGitCommitId: 0591528cbfde14ccfd3900c3fb19aba382c05349
+
+steps:
+  - task: Cache@2
+    displayName: Cache vcpkg
+    inputs:
+      key: $(Build.SourcesDirectory)/cmakesettingsjson/vcpkg_x64-linux.txt | "$(vcpkgGitCommitId)" | "$(Agent.OS)"
+      path: '$(Build.BinariesDirectory)/vcpkg'
+  - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+    displayName: 'Run vcpkg'
+    inputs:
+      vcpkgArguments: '@$(Build.SourcesDirectory)/cmakesettingsjson/vcpkg_x64-linux.txt'
+      vcpkgGitURL: 'https://github.com/lukka/vcpkg.git'
+      vcpkgGitCommitId: $(vcpkgGitCommitId)
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    displayName: 'CMake+Makefiles'
+    inputs:
+      cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+      cmakeListsTxtPath: '$(Build.SourcesDirectory)/cmakesettingsjson/CMakeLists.txt'
+      useVcpkgToolchainFile: true
+      buildDirectory: '$(Build.BinariesDirectory)/unixmakefiles'
+      cmakeAppendedArgs: '-G "Unix Makefiles" '
+      buildWithCMakeArgs: '-- -j'
+      vcpkgTriplet: '$(RUNVCPKG_VCPKG_TRIPLET)'
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    displayName: 'CMake+Ninja'
+    inputs:
+      cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+      cmakeListsTxtPath: '$(Build.SourcesDirectory)/cmakesettingsjson/CMakeLists.txt'
+      useVcpkgToolchainFile: true
+      buildDirectory: '$(Build.BinariesDirectory)/ninja'
+      cmakeAppendedArgs: '-G "Ninja"'
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    displayName: 'CMakeSettings.json'
+    inputs:
+      cmakeListsOrSettingsJson: CMakeSettingsJson
+      cmakeSettingsJsonPath: 'cmakesettingsjson/CMakeSettings.json'
+      useVcpkgToolchainFile: true
+      configurationRegexFilter: 'Linux-Release'
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    displayName: 'CMakeSettings.json toolchain property'
+    inputs:
+      cmakeListsOrSettingsJson: CMakeSettingsJson
+      cmakeSettingsJsonPath: 'cmakesettingsjson/CMakeSettings.json'
+      useVcpkgToolchainFile: true
+      configurationRegexFilter: 'toolchainproperty'
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    displayName: 'CMakeSettings.json toolchain variable'
+    inputs:
+      cmakeListsOrSettingsJson: CMakeSettingsJson
+      cmakeSettingsJsonPath: 'cmakesettingsjson/CMakeSettings.json'
+      useVcpkgToolchainFile: true
+      configurationRegexFilter: 'toolchainvariable'
+  - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+    displayName: 'CMakeSettings.json all Linux configurations'
+    inputs:
+      cmakeListsOrSettingsJson: CMakeSettingsJson
+      cmakeSettingsJsonPath: 'cmakesettingsjson/CMakeSettings.json'
+      useVcpkgToolchainFile: true
+      configurationRegexFilter: '.*Linux.*'
+
+
+      

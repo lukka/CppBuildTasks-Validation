@@ -1,0 +1,54 @@
+variables:
+  system.debug: true
+  thisRepo: 'CppBuildTasks-Validation'
+  vcpkgGitCommitId: 2019.10
+
+resources:
+  repositories:
+  - repository: vcpkg
+    type: github
+    name: microsoft/vcpkg
+    endpoint: vcpkg
+    ref: $(vcpkgGitCommitId)
+
+jobs:
+
+- job: ubuntu_hosted
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  steps:
+    - checkout: self
+      submodules: recursive
+    - checkout: vcpkg
+      displayName: "Checkout vcpkg in '$(Build.SourcesDirectory)/vcpkg'"
+    - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+      displayName: 'Run vcpkg on the submodule without updating'
+      inputs:
+        vcpkgTriplet: 'x64-linux'
+        vcpkgArguments: '$(vcpkgPackages)'
+        vcpkgDirectory: '$(Build.SourcesDirectory)/$(thisRepo)/vcpkg'
+        cleanAfterBuild: true
+        doNotUpdateVcpkg: true
+    - task: Cache@2
+      displayName: Cache vcpkg
+      inputs:
+        key: $(Build.SourcesDirectory)/$(thisRepo)/cmakeliststxt/vcpkg_x64-linux.txt | "$(vcpkgGitCommitId)" | "$(Agent.OS)"
+        path: '$(Build.SourcesDirectory)/vcpkg'
+    - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
+      displayName: 'Run vcpkg on the directory (indipendently check-ed out) with no update'
+      inputs:
+        vcpkgTriplet: 'x64-linux'
+        vcpkgArguments: '$(vcpkgPackages)'
+        vcpkgDirectory: '$(Build.SourcesDirectory)/vcpkg'
+        cleanAfterBuild: true
+        doNotUpdateVcpkg: true
+    - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
+      displayName: 'Run CMake with Ninja'
+      inputs:
+        cmakeListsTxtPath: '$(thisRepo)/cmakeliststxt/CMakeLists.txt'
+        useVcpkgToolchainFile: true
+        vcpkgTriplet: '$(RUNVCPKG_VCPKG_TRIPLET)'
+        buildWithCMakeArgs: '-- -v'
+        ninjaDownloadUrl: https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip
+

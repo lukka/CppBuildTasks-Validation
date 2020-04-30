@@ -1,0 +1,73 @@
+# Copyright (c) 2020 Luca Cappa
+# Released under the term specified in file LICENSE.txt
+# SPDX short identifier: MIT
+name: hosted-basic-autocache-matchers
+on: [push]
+
+jobs:
+  job:
+    name: ${{ matrix.os }}-hosted-basic-matcher
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: windows-latest
+            triplet: x64-windows
+            cxx: cl.exe
+          - os: ubuntu-latest
+            triplet: x64-linux
+            cxx: gcc
+          - os: macos-latest
+            triplet: x64-osx
+            cxx: clang
+
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+
+      - uses: lukka/get-cmake@latest
+      - name: dir
+        run: find $RUNNER_WORKSPACE
+        shell: bash
+
+      - uses: ilammy/msvc-dev-cmd@v1
+      - uses: lukka/set-shell-env@v1
+        with:
+          CXX: ${{ matrix.cxx }}
+          CC: ${{ matrix.cxx }}
+
+      - name: Run CMake+Ninja with triplet (cmd) [CMake error - disabled]
+        # This does not work as CMakeLists.txt report relative path to the source dir,
+        # that must be the root of repo to work:
+        # https://github.com/actions/runner/issues/461
+        if: false
+        continue-on-error: true
+        uses: lukka/run-cmake@matchers
+        with:
+          cmakeGenerator: 'Ninja'  
+          cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
+          cmakeListsTxtPath: '${{ github.workspace }}/matchers/cmake_error/CMakeLists.txt'
+          buildWithCMake: false
+          vcpkgTriplet: ${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}
+          buildDirectory: '${{ runner.workspace }}/b1/'
+      - name: Run CMake+Ninja with triplet (cmd) [Build error]
+        continue-on-error: true
+        uses: lukka/run-cmake@matchers
+        with:
+          cmakeGenerator: 'Ninja'  
+          cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
+          cmakeListsTxtPath: '${{ github.workspace }}/matchers/build_error/CMakeLists.txt'
+          buildDirectory: '${{ runner.workspace }}/b2/'
+          buildWithCMake: true
+          buildWithCMakeArgs: '-- -v -k 0'
+      - name: Run CMake+Ninja with triplet (cmd) [CMake error + warning]
+        continue-on-error: true
+        uses: lukka/run-cmake@matchers
+        with:
+          cmakeGenerator: 'Ninja'  
+          cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
+          cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
+          buildDirectory: '${{ runner.workspace }}/b3/'

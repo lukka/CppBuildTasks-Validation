@@ -58,14 +58,14 @@ jobs:
         uses: lukka/run-vcpkg@master
         id: runvcpkg
         with:
-          vcpkgArguments: '@${{ github.workspace }}/cmakesettings.json/vcpkg_x64.txt --triplet ${{ matrix.triplet }}'
+          vcpkgArguments: '@${{ github.workspace }}/cmakesettingsjson/vcpkg_x64.txt --triplet ${{ matrix.triplet }}'
           vcpkgDirectory: ${{ github.workspace }}/../b/vcpkg
           vcpkgGitCommitId: ${{ env.vcpkgGitCommitId }}
       - name: Run CMake
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@matchers
         id: runcmake
         with:
-          cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
           useVcpkgToolchainFile: true
           buildWithCMakeArgs: '-- -v'
       - name: Prints output of run-vcpkg's task

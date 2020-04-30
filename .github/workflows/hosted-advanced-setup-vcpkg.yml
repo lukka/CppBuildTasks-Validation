@@ -44,7 +44,7 @@ jobs:
       - name: Set vcpkg's response file path used as part of cache's key.
         uses: lukka/set-shell-env@master
         with:
-          VCPKGRESPONSEFILE: ${{ github.workspace }}/cmakelists.txt/vcpkg_${{ matrix.triplet }}.txt
+          VCPKGRESPONSEFILE: ${{ github.workspace }}/cmakeliststxt/vcpkg_${{ matrix.triplet }}.txt
           VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
           filter: ^VCPKG.*
       - name: Restore artifacts, or setup vcpkg (do not install any package)
@@ -66,58 +66,58 @@ jobs:
         run: echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT ANDROID_HOME=$ANDROID_HOME"
         shell: bash
       - name: Run CMake with Ninja Multi-Config
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@matchers
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-          cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
           useVcpkgToolchainFile: true
           buildDirectory: '${{ runner.workspace }}/b/ninjaMultiConfig'
           cmakeAppendedArgs: '"-GNinja Multi-Config" -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_DEFAULT_TRIPLET }} '
           buildWithCMake: true
       - name: Run CMake+EnvVar (Un*x)
         if: "!contains( matrix.os, 'windows')"
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@matchers
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-          cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
           useVcpkgToolchainFile: true
           buildDirectory: '${{ runner.workspace }}/b/envvar_ninja'
           cmakeAppendedArgs: '-GNinja -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_DEFAULT_TRIPLET }} -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake'
           buildWithCMake: false
       - name: Run CMake+EnvVar (Win)
         if: "contains( matrix.os, 'windows')"
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@matchers
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-          cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
           useVcpkgToolchainFile: true
           buildDirectory: '${{ runner.workspace }}/b/envvar_ninja'
           cmakeAppendedArgs: '-GNinja -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_DEFAULT_TRIPLET }} -DCMAKE_TOOLCHAIN_FILE=%ANDROID_NDK_HOME%/build/cmake/android.toolchain.cmake'
           buildWithCMake: false
       - name: Run CMake+Ninja
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@matchers
         id: runcmake
         with:
-          cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
           useVcpkgToolchainFile: true
           buildWithCMakeArgs: '-- -v'
           buildDirectory: '${{ runner.workspace }}/b/ninja/'
           cmakeAppendedArgs: '-GNinja -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_DEFAULT_TRIPLET }}'
       - name: Run CMake+VS
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@matchers
         if: contains( matrix.os, 'windows')
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-          cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
           useVcpkgToolchainFile: true
           buildDirectory: '${{ runner.workspace }}/b/vs16'
           cmakeAppendedArgs: '"-GVisual Studio 16 2019" -Ax64 -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_DEFAULT_TRIPLET }} '
       - name: 'Run CMake with CMakeSettings.json'
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@matchers
         with:
           cmakeListsOrSettingsJson: CMakeSettingsJson
-          cmakeSettingsJsonPath: '${{ github.workspace }}/cmakesettings.json/CMakeSettings.json'
+          cmakeSettingsJsonPath: '${{ github.workspace }}/cmakesettingsjson/CMakeSettings.json'
           useVcpkgToolchainFile: true
           configurationRegexFilter: ${{ matrix.configuration }}
           cmakeAppendedArgs: '-DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_DEFAULT_TRIPLET }}'

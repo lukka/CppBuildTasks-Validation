@@ -29,7 +29,7 @@ jobs:
       - name: Set vcpkg's response file path used as part of cache's key.
         uses: lukka/set-shell-env@master
         with:
-          VCPKGRESPONSEFILE: ${{ github.workspace }}/cmakelists.txt/vcpkg_${{ matrix.triplet }}.txt
+          VCPKGRESPONSEFILE: ${{ github.workspace }}/cmakeliststxt/vcpkg_${{ matrix.triplet }}.txt
 
       - name: dir
         run: find ${{ runner.workspace }}
@@ -47,10 +47,10 @@ jobs:
           appendedCacheKey: ${{ hashFiles( env.VCPKGRESPONSEFILE ) }}
 
       - name: Run CMake with Ninja
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@matchers
         id: runcmake
         with:
-          cmakeListsTxtPath: '${{ github.workspace }}/cmakelists.txt/CMakeLists.txt'
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
           useVcpkgToolchainFile: true
           buildWithCMakeArgs: '-- -v'
       - name: Prints output of run-vcpkg's task

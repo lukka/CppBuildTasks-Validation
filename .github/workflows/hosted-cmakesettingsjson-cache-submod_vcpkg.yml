@@ -31,7 +31,7 @@ jobs:
       - name: Set vcpkg's response file path used as part of cache's key.
         uses: lukka/set-shell-env@master
         with:
-          VCPKGRESPONSEFILE: ${{ github.workspace }}/cmakesettings.json/vcpkg_${{ matrix.triplet }}.txt
+          VCPKGRESPONSEFILE: ${{ github.workspace }}/cmakesettingsjson/vcpkg_${{ matrix.triplet }}.txt
           filter: VCPKGRESPONSEFILE
 
       - name: dir
@@ -50,36 +50,36 @@ jobs:
         run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
 
       - name: 'CMake+Makefiles'
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@matchers
         if: contains( matrix.os, 'windows') == false
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-          cmakeListsTxtPath: '${{ github.workspace }}/cmakesettings.json/CMakeLists.txt'
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakesettingsjson/CMakeLists.txt'
           useVcpkgToolchainFile: true
           buildDirectory: '${{ runner.workspace }}/b//unixmakefiles'
           cmakeAppendedArgs: '-G"Unix Makefiles"'
       - name: 'CMake+XCode CMakeListsTxtAdvanced'
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@matchers
         if: contains( matrix.os, 'macos')
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-          cmakeListsTxtPath: '${{ github.workspace }}/cmakesettings.json/CMakeLists.txt'
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakesettingsjson/CMakeLists.txt'
           useVcpkgToolchainFile: true
           buildDirectory: '${{ runner.workspace }}/b/xcode'
           cmakeAppendedArgs: '-GXcode'
       - name: 'CMake+Ninja CMakeListsTxtAdvanced'
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@matchers
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-          cmakeListsTxtPath: '${{ github.workspace }}/cmakesettings.json/CMakeLists.txt'
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakesettingsjson/CMakeLists.txt'
           useVcpkgToolchainFile: true
           buildDirectory: '${{ runner.workspace }}/ninja'
           cmakeAppendedArgs: '-GNinja'
       - name: 'CMakeSettings.json'
-        uses: lukka/run-cmake@master
+        uses: lukka/run-cmake@matchers
         with:
           cmakeListsOrSettingsJson: CMakeSettingsJson
-          cmakeSettingsJsonPath: '${{ github.workspace }}/cmakesettings.json/CMakeSettings.json'
+          cmakeSettingsJsonPath: '${{ github.workspace }}/cmakesettingsjson/CMakeSettings.json'
           useVcpkgToolchainFile: true
           configurationRegexFilter: '${{ matrix.configuration }}'
 
