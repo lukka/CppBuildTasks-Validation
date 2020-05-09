@@ -39,7 +39,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Restore artifacts, or Run vcpkg, build and cache artifacts
-        uses: lukka/run-vcpkg@master
+        uses: lukka/run-vcpkg@v2
         id: runvcpkg
         with:
           vcpkgArguments: '${{ matrix.vcpkgPackages }}'
@@ -56,7 +56,8 @@ jobs:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
           useVcpkgToolchainFile: true
           buildDirectory: '${{ runner.workspace }}/b/envvar_ninja'
-          cmakeAppendedArgs: '-GNinja -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake'
+          cmakeAppendedArgs: '-GNinja
+          -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk-bundle/build/cmake/android.toolchain.cmake'
           buildWithCMake: false
       - name: Run CMake+Ninja
         uses: lukka/run-cmake@v2
