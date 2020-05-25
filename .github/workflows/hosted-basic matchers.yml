@@ -1,7 +1,7 @@
 # Copyright (c) 2020 Luca Cappa
 # Released under the term specified in file LICENSE.txt
 # SPDX short identifier: MIT
-name: hosted-basic-autocache-matchers
+name: hosted-basic-matchers
 on: [push]
 
 jobs:
@@ -51,7 +51,6 @@ jobs:
           cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
           cmakeListsTxtPath: '${{ github.workspace }}/matchers/cmake_error/CMakeLists.txt'
           buildWithCMake: false
-          vcpkgTriplet: ${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}
           buildDirectory: '${{ runner.workspace }}/b1/'
       - name: Run CMake+Ninja with triplet (cmd) [Build error]
         continue-on-error: true
