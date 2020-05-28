@@ -32,13 +32,10 @@ jobs:
           VCPKGRESPONSEFILE: ${{ github.workspace }}/cmakeliststxt/vcpkg_${{ matrix.triplet }}.txt
 
       - name: dir
-        run: find ${{ runner.workspace }}
-        if: "!contains( matrix.os, 'windows')"
-      - name: dir
-        run: gci -recurse ${{ runner.workspace }}
-        if: contains( matrix.os, 'windows')
+        run: find $RUNNER_WORKSPACE
+        shell: bash
       - name: Restore artifacts, or run vcpkg, build and cache artifacts
-        uses: lukka/run-vcpkg@actions_cache_v1.2
+        uses: lukka/run-vcpkg@cachev2.0
         id: runvcpkg
         with:
           vcpkgArguments: '@${{ env.VCPKGRESPONSEFILE }}'

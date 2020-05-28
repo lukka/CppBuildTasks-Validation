@@ -15,15 +15,15 @@ jobs:
         include:
           - os: windows-latest
             triplet: x64-windows
-            vcpkgCommitId: '0591528cbfde14ccfd3900c3fb19aba382c05349'
+            vcpkgCommitId: '8a9a97315aefb3f8bc5d81bf66ca0025938b9c91'
             vcpkgPackages: 'sqlite3'
           - os: ubuntu-latest
             triplet: x64-linux
-            vcpkgCommitId: '0591528cbfde14ccfd3900c3fb19aba382c05349'
+            vcpkgCommitId: '8a9a97315aefb3f8bc5d81bf66ca0025938b9c91'
             vcpkgPackages: 'sqlite3'
           - os: macos-latest
             triplet: x64-osx
-            vcpkgCommitId: '0591528cbfde14ccfd3900c3fb19aba382c05349'
+            vcpkgCommitId: '8a9a97315aefb3f8bc5d81bf66ca0025938b9c91'
             vcpkgPackages: 'sqlite3'
 
     steps:
@@ -33,19 +33,19 @@ jobs:
 
       - uses: lukka/get-cmake@latest
       - name: dir
-        run: find ${{ runner.workspace }}
-        if: "!contains( matrix.os, 'windows')"
-      - name: dir
-        run: gci -recurse ${{ runner.workspace }}
-        if: contains( matrix.os, 'windows')
+        run: find $RUNNER_WORKSPACE
+        shell: bash
       - name: Restore artifacts, or run vcpkg, build and cache artifacts
-        uses: lukka/run-vcpkg@actions_cache_v1.2
+        uses: lukka/run-vcpkg@cachev2.0
         id: runvcpkg
         with:
           vcpkgArguments: '${{ matrix.vcpkgPackages }}'
           vcpkgTriplet: '${{ matrix.triplet }}'
           vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
           vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
+      - name: dir
+        run: find $RUNNER_WORKSPACE
+        shell: bash
       - name: Prints outputs of run-vcpkg task
         run: echo "'${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}' '${{  steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
       - name: Run CMake+Ninja without triplet

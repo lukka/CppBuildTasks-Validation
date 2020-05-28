@@ -1,7 +1,7 @@
 variables:
   system.debug: true
   thisRepo: 'CppBuildTasks-Validation'
-  vcpkgGitCommitId: 0591528cbfde14ccfd3900c3fb19aba382c05349
+  vcpkgGitCommitId: 8a9a97315aefb3f8bc5d81bf66ca0025938b9c91
 
   # vcpkgTriplet: 'x64-windows' Not needed as extracted from the command line arguments.
 

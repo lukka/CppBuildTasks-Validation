@@ -8,7 +8,7 @@ pool:
 variables:
   system.debug: true
   vcpkgPackages: 'sqlite3'
-  vcpkgCommitId: 0591528cbfde14ccfd3900c3fb19aba382c05349
+  vcpkgCommitId: 8a9a97315aefb3f8bc5d81bf66ca0025938b9c91
 steps:
   - template: ../templates/install-gcc-macos.yml
   - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0

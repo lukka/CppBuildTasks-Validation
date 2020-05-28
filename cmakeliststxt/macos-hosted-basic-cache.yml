@@ -6,7 +6,7 @@ jobs:
     
   variables:
     system.debug: true
-    vcpkgCommitId: 0591528cbfde14ccfd3900c3fb19aba382c05349
+    vcpkgCommitId: 8a9a97315aefb3f8bc5d81bf66ca0025938b9c91
 
   steps:
     - template: ../templates/install-gcc-macos.yml

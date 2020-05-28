@@ -7,7 +7,7 @@ on: [push]
 jobs:
   job:
     env:
-      vcpkgGitCommitId: '0591528cbfde14ccfd3900c3fb19aba382c05349'
+      vcpkgGitCommitId: '8a9a97315aefb3f8bc5d81bf66ca0025938b9c91'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -55,7 +55,7 @@ jobs:
         run: gci -recurse ${{ runner.workspace }}
         if: contains( runner.os, 'windows')
       - name: Run vcpkg and cache artifacts
-        uses: lukka/run-vcpkg@actions_cache_v1.2
+        uses: lukka/run-vcpkg@cachev2.0
         id: runvcpkg
         with:
           vcpkgArguments: '@${{ github.workspace }}/cmakesettingsjson/vcpkg_x64.txt --triplet ${{ matrix.triplet }}'

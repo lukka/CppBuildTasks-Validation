@@ -8,12 +8,12 @@ pool:
 variables:
   vcpkgPackages: 'sqlite3'
   system.debug: true
-  vcpkgCommitId: 0591528cbfde14ccfd3900c3fb19aba382c05349
+  vcpkgCommitId: 8a9a97315aefb3f8bc5d81bf66ca0025938b9c91
 steps:
   - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
     displayName: 'Run vcpkg'
     inputs:
-      vcpkgGitCommitId: 0591528cbfde14ccfd3900c3fb19aba382c05349
+      vcpkgGitCommitId: 8a9a97315aefb3f8bc5d81bf66ca0025938b9c91
       vcpkgTriplet: 'x64-windows'
       vcpkgArguments: '$(vcpkgPackages)'
   - task: lucappa.cmake-ninja-vcpkg-tasks.f2b1ec7d-bc54-4cc8-b9ed-1bc7f37c9dc6.run-cmake@0
