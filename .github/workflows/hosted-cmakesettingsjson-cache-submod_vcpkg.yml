@@ -38,7 +38,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Restore artifacts, run vcpkg, build and cache artifacts
-        uses: lukka/run-vcpkg@master
+        uses: lukka/run-vcpkg@ensure_cachedir_exists
         id: runvcpkg
         with:
           vcpkgArguments: '@${{ env.VCPKGRESPONSEFILE }}'

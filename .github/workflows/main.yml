@@ -55,11 +55,7 @@ jobs:
         run: gci -recurse ${{ runner.workspace }}
         if: contains( runner.os, 'windows')
       - name: Run vcpkg and cache artifacts
-<<<<<<< HEAD
-        uses: lukka/run-vcpkg@master
-=======
-        uses: lukka/run-vcpkg@cachev2.0
->>>>>>> d0170bc... test run-vcpkg v3
+        uses: lukka/run-vcpkg@ensure_cachedir_exists
         id: runvcpkg
         with:
           vcpkgArguments: '@${{ github.workspace }}/cmakesettingsjson/vcpkg_x64.txt --triplet ${{ matrix.triplet }}'
