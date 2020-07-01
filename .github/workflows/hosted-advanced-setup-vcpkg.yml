@@ -48,7 +48,7 @@ jobs:
           VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
           filter: ^VCPKG.*
       - name: Restore artifacts, or setup vcpkg (do not install any package)
-        uses: lukka/run-vcpkg@ensure_cachedir_exists
+        uses: lukka/run-vcpkg@add_triplet_to_cachekey
         id: runvcpkg
         with:
           setupOnly: true
