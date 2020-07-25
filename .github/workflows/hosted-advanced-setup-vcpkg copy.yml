@@ -39,7 +39,7 @@ jobs:
           VCPKG_DEST_WIN: C:\qbt_tools\vcpkg
           filter: ^VCPKG.*
       - name: Restore artifacts, or setup vcpkg (do not install any package)
-        uses: lukka/run-vcpkg@add_triplet_to_cachekey
+        uses: lukka/run-vcpkg@v3
         id: runvcpkg
         with:
           setupOnly: true
