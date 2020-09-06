@@ -8,6 +8,7 @@
             "inheritEnvironments": [
                 "msvc_x86"
             ],
+            "buildRoot" : "$HOME/.vs/build/{name}",
             "cmakeCommandArgs": "",
             "ctestCommandArgs": "",
             "variables": [
@@ -23,6 +24,7 @@
             "name": "Linux-toolchainproperty",
             "generator": "Ninja",
             "configurationType": "Debug",
+            "buildRoot" : "$HOME/.vs/build/{name}",
             "inheritEnvironments": [
                 "msvc_x86"
             ],
@@ -85,7 +87,8 @@
             "configurationType": "Release",
             "cmakeCommandArgs": "",
             "buildCommandArgs": "",
-            "ctestCommandArgs": ""
+            "ctestCommandArgs": "",
+            "buildRoot" : "$HOME/.vs/build/{name}"
         },
         {
             "name": "Linux-Release-Makefiles",
@@ -93,7 +96,8 @@
             "configurationType": "Release",
             "cmakeCommandArgs": "",
             "buildCommandArgs": "",
-            "ctestCommandArgs": ""
+            "ctestCommandArgs": "",
+            "buildRoot" : "$HOME/.vs/build/{name}"
         }
     ]
 }
