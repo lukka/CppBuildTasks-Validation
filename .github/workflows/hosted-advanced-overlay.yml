@@ -43,7 +43,7 @@ jobs:
           VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
           filter: ^VCPKG.*
       - name: Restore artifacts, run vcpkg using overlays
-        uses: lukka/run-vcpkg@npm_pack
+        uses: lukka/run-vcpkg@v4
         id: runvcpkg
         with:
           vcpkgArguments: '@${{ env.VCPKGRESPONSEFILE }} @${{ env.VCPKGRESPONSEFILE_FOR_OVERLAYS }}'
@@ -63,7 +63,7 @@ jobs:
         with:
           CXX: ${{ matrix.cxx }}
       - name: Run CMake with Ninja Multi-Config
-        uses: lukka/run-cmake@npm_pack
+        uses: lukka/run-cmake@v3
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
           cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
@@ -73,7 +73,7 @@ jobs:
           buildWithCMake: true
       - name: Run CMake+EnvVar (Un*x)
         if: "!contains( matrix.os, 'windows')"
-        uses: lukka/run-cmake@npm_pack
+        uses: lukka/run-cmake@v3
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
           cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
@@ -83,7 +83,7 @@ jobs:
           buildWithCMake: false
       - name: Run CMake+EnvVar (Win)
         if: "contains( matrix.os, 'windows')"
-        uses: lukka/run-cmake@npm_pack
+        uses: lukka/run-cmake@v3
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
           cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
@@ -92,7 +92,7 @@ jobs:
           cmakeAppendedArgs: '-GNinja -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_DEFAULT_TRIPLET }} -DCMAKE_TOOLCHAIN_FILE=%ANDROID_NDK_HOME%/build/cmake/android.toolchain.cmake'
           buildWithCMake: false
       - name: Run CMake+Ninja
-        uses: lukka/run-cmake@npm_pack
+        uses: lukka/run-cmake@v3
         id: runcmake
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
@@ -102,7 +102,7 @@ jobs:
           buildDirectory: '${{ runner.workspace }}/b/ninja/'
           cmakeAppendedArgs: '-GNinja -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_DEFAULT_TRIPLET }}'
       - name: Run CMake+VS
-        uses: lukka/run-cmake@npm_pack
+        uses: lukka/run-cmake@v3
         if: contains( matrix.os, 'windows')
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
@@ -111,7 +111,7 @@ jobs:
           buildDirectory: '${{ runner.workspace }}/b/vs16'
           cmakeAppendedArgs: '"-GVisual Studio 16 2019" -Ax64 -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_DEFAULT_TRIPLET }} '
       - name: 'Run CMake with CMakeSettings.json'
-        uses: lukka/run-cmake@npm_pack
+        uses: lukka/run-cmake@v3
         with:
           cmakeListsOrSettingsJson: CMakeSettingsJson
           cmakeSettingsJsonPath: '${{ github.workspace }}/cmakesettingsjson/CMakeSettings.json'
