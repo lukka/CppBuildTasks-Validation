@@ -35,7 +35,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Restore artifacts, or run vcpkg, build and cache artifacts
-        uses: lukka/run-vcpkg@dev/consume_latest_packages
+        uses: lukka/run-vcpkg@v4
         id: runvcpkg
         with:
           vcpkgArguments: '@${{ env.VCPKGRESPONSEFILE }}'
@@ -44,7 +44,7 @@ jobs:
           appendedCacheKey: ${{ hashFiles( env.VCPKGRESPONSEFILE ) }}
 
       - name: Run CMake with Ninja
-        uses: lukka/run-cmake@dev_consume_latest_packages
+        uses: lukka/run-cmake@v3
         id: runcmake
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
