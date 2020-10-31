@@ -34,7 +34,7 @@ jobs:
         with:
           submodules: true
 
-      - uses: lukka/get-cmake@master
+      - uses: lukka/get-cmake@latest
       - name: dir
         run: find $RUNNER_WORKSPACE
         shell: bash
