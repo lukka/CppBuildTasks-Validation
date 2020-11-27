@@ -39,7 +39,7 @@ jobs:
           VCPKG_DEST_WIN: C:\qbt_tools\vcpkg
           filter: ^VCPKG.*
       - name: Restore artifacts, or setup vcpkg (do not install any package)
-        uses: lukka/run-vcpkg@main
+        uses: lukka/run-vcpkg@dev/postcache_on_setuponly
         id: runvcpkg
         with:
           setupOnly: true
@@ -51,7 +51,7 @@ jobs:
           $VCPKG_ROOT/vcpkg install @$VCPKGRESPONSEFILE --clean-after-build
         shell: bash
         name: Run vcpkg in a inline script in this workflow.
-      - name: Prints output of run-vcpkg's task
+      - name: Prints output of run-vcpkg's action
         run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}'"
       - name: Prints output of ANDROID_SDK_ROOT and ANDROID_HOME env var
         run: echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT ANDROID_HOME=$ANDROID_HOME"

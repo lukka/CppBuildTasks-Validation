@@ -55,7 +55,7 @@ jobs:
         run: gci -recurse ${{ runner.workspace }}
         if: contains( runner.os, 'windows')
       - name: Run vcpkg and cache artifacts
-        uses: lukka/run-vcpkg@main
+        uses: lukka/run-vcpkg@dev/postcache_on_setuponly
         id: runvcpkg
         with:
           vcpkgArguments: '@${{ github.workspace }}/cmakesettingsjson/vcpkg_x64.txt --triplet ${{ matrix.triplet }}'
