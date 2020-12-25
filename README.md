@@ -10,4 +10,4 @@ Essentially the yaml definitions exercise the actions and the tasks to verify th
 # License
 All the content in this repository is licensed under the [MIT License](LICENSE.txt).
 
-Copyright (c) 2019-2020 Luca Cappa
+Copyright (c) 2019-2020-2021 Luca Cappa

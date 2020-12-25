@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2020 Luca Cappa
+# Copyright (c) 2019-2020-2021 Luca Cappa
 # Released under the term specified in file LICENSE.txt
 # SPDX short identifier: MIT
 name: hosted-basic-submod_vcpkg-autocache
@@ -35,7 +35,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Restore artifacts, or run vcpkg, build and cache artifacts
-        uses: lukka/run-vcpkg@v6
+        uses: lukka/run-vcpkg@dev/fix_key_computation
         id: runvcpkg
         with:
           vcpkgArguments: '@${{ env.VCPKGRESPONSEFILE }}'
@@ -44,7 +44,7 @@ jobs:
           appendedCacheKey: ${{ hashFiles( env.VCPKGRESPONSEFILE ) }}
 
       - name: Run CMake with Ninja
-        uses: lukka/run-cmake@v3
+        uses: lukka/run-cmake@cache_vcpkg_installed
         id: runcmake
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
