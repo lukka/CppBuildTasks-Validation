@@ -6,7 +6,7 @@ jobs:
 
   variables:
     system.debug: true
-    vcpkgCommitId: 8a9a97315aefb3f8bc5d81bf66ca0025938b9c91
+    vcpkgCommitId: 30124253eecff36bc90f73341edbfb4f845e2a1e
 
   steps:
     - task: Cache@2

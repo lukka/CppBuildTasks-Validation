@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2020 Luca Cappa
+# Copyright (c) 2019-2020-2021 Luca Cappa
 # Released under the term specified in file LICENSE.txt
 # SPDX short identifier: MIT
 name: hosted-basic-autocache
@@ -15,15 +15,15 @@ jobs:
         include:
           - os: windows-latest
             triplet: x64-windows
-            vcpkgCommitId: '8a9a97315aefb3f8bc5d81bf66ca0025938b9c91'
+            vcpkgCommitId: '30124253eecff36bc90f73341edbfb4f845e2a1e'
             vcpkgPackages: 'sqlite3'
           - os: ubuntu-latest
             triplet: x64-linux
-            vcpkgCommitId: '8a9a97315aefb3f8bc5d81bf66ca0025938b9c91'
+            vcpkgCommitId: '30124253eecff36bc90f73341edbfb4f845e2a1e'
             vcpkgPackages: 'sqlite3'
           - os: macos-latest
             triplet: x64-osx
-            vcpkgCommitId: '8a9a97315aefb3f8bc5d81bf66ca0025938b9c91'
+            vcpkgCommitId: '30124253eecff36bc90f73341edbfb4f845e2a1e'
             vcpkgPackages: 'sqlite3'
 
     steps:
@@ -49,7 +49,7 @@ jobs:
       - name: Prints outputs of run-vcpkg task
         run: echo "'${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}' '${{  steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
       - name: Run CMake+Ninja without triplet
-        uses: lukka/run-cmake@v3
+        uses: lukka/run-cmake@cache_vcpkg_installed
         id: runcmake
         with:
           cmakeGenerator: 'Ninja'  
@@ -59,7 +59,7 @@ jobs:
           buildWithCMakeArgs: '-- -v'
           buildDirectory: '${{ runner.workspace }}/b/ninja/'
       - name: Run CMake+Ninja with triplet (cmd)
-        uses: lukka/run-cmake@v3
+        uses: lukka/run-cmake@cache_vcpkg_installed
         id: runcmake_cmd
         with:
           cmakeGenerator: 'Ninja'  
@@ -71,7 +71,7 @@ jobs:
           buildDirectory: '${{ runner.workspace }}/b/ninja/'
       - name: Run CMake+Ninja with triplet (bash)
         if: false
-        uses: lukka/run-cmake@v3
+        uses: lukka/run-cmake@cache_vcpkg_installed
         id: runcmake_bash
         with:
           cmakeGenerator: 'Ninja'  
