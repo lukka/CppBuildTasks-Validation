@@ -45,6 +45,5 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Run CMake, vcpkg and Ninja in one command!
-        shell: bash
         run: |
-          cmake -GNinja '${{ github.workspace }}/vcpkg_manifest/CMakeLists.txt' -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake
+          cmake -GNinja "${{ github.workspace }}/vcpkg_manifest/CMakeLists.txt" -DCMAKE_TOOLCHAIN_FILE="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake"
