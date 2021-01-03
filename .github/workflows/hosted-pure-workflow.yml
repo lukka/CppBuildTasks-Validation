@@ -22,7 +22,7 @@ jobs:
           - os: macos-latest
             triplet: x64-osx
     env:
-      CMAKE_BUILD_DIR: ${{ github.workspace }}/build/
+      CMAKE_BUILD_DIR: ${{ github.workspace }}/builddir/
       VCPKG_ROOT: ${{ github.workspace }}/vcpkg/
     steps:
       - uses: actions/checkout@v1
