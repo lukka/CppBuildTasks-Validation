@@ -43,7 +43,7 @@ jobs:
           VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
           filter: ^VCPKG.*
       - name: Restore artifacts, run vcpkg using overlays
-        uses: lukka/run-vcpkg@main
+        uses: lukka/run-vcpkg@check_vcpkg_exe_is_valid 
         id: runvcpkg
         with:
           vcpkgArguments: '@${{ env.VCPKGRESPONSEFILE }} @${{ env.VCPKGRESPONSEFILE_FOR_OVERLAYS }}'

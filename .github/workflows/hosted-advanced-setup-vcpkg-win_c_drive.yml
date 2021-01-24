@@ -39,7 +39,7 @@ jobs:
           VCPKG_DEST_WIN: C:\qbt_tools\vcpkg
           filter: ^VCPKG.*
       - name: Restore artifacts, or setup vcpkg (do not install any package)
-        uses: lukka/run-vcpkg@main
+        uses: lukka/run-vcpkg@check_vcpkg_exe_is_valid 
         id: runvcpkg
         with:
           setupOnly: true
