@@ -35,7 +35,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Restore artifacts, or setup vcpkg (do not install any package)
-        uses: lukka/run-vcpkg@dumplog
+        uses: lukka/run-vcpkg@main
         id: runvcpkg
         with:
           setupOnly: true
@@ -48,7 +48,7 @@ jobs:
       - name: Prints output of run-vcpkg's action
         run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}'"
       - name: Run CMake with vcpkg.json manifest
-        uses: lukka/run-cmake@dumplog
+        uses: lukka/run-cmake@main
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
           cmakeListsTxtPath: '${{ github.workspace }}/vcpkg_manifest/CMakeLists.txt'
