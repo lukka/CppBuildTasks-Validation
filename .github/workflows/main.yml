@@ -55,14 +55,14 @@ jobs:
         run: gci -recurse ${{ runner.workspace }}
         if: contains( runner.os, 'windows')
       - name: Run vcpkg and cache artifacts
-        uses: lukka/run-vcpkg@main
+        uses: lukka/run-vcpkg@dumplog
         id: runvcpkg
         with:
           vcpkgArguments: '@${{ github.workspace }}/cmakesettingsjson/vcpkg_x64.txt --triplet ${{ matrix.triplet }}'
           vcpkgDirectory: ${{ github.workspace }}/../b/vcpkg
           vcpkgGitCommitId: ${{ env.vcpkgGitCommitId }}
       - name: Run CMake
-        uses: lukka/run-cmake@main
+        uses: lukka/run-cmake@dumplog
         id: runcmake
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'

@@ -65,7 +65,7 @@
                 "msvc_x64"
             ],
             "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
-            "cmakeCommandArgs": "--verbose",
+            "cmakeCommandArgs": "",
             "buildCommandArgs": "-ds",
             "ctestCommandArgs": ""
         },
