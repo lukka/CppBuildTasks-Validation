@@ -45,7 +45,7 @@ jobs:
         # https://github.com/actions/runner/issues/461
         if: false
         continue-on-error: true
-        uses: lukka/run-cmake@main
+        uses: lukka/run-cmake@dumplog
         with:
           cmakeGenerator: 'Ninja'  
           cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
@@ -54,7 +54,7 @@ jobs:
           buildDirectory: '${{ runner.workspace }}/b1/'
       - name: Run CMake+Ninja with triplet (cmd) [Build error]
         continue-on-error: true
-        uses: lukka/run-cmake@main
+        uses: lukka/run-cmake@dumplog
         with:
           cmakeGenerator: 'Ninja'  
           cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
@@ -64,7 +64,7 @@ jobs:
           buildWithCMakeArgs: '-- -v -k 0'
       - name: Run CMake+Ninja with triplet (cmd) [CMake error + warning]
         continue-on-error: true
-        uses: lukka/run-cmake@main
+        uses: lukka/run-cmake@dumplog
         with:
           cmakeGenerator: 'Ninja'  
           cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
