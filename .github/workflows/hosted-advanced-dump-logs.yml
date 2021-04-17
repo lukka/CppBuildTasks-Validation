@@ -1,0 +1,63 @@
+# Copyright (c) 2019-2020-2021 Luca Cappa
+# Released under the term specified in file LICENSE.txt
+# SPDX short identifier: MIT
+name: hosted-advanced-dumplogs-autocache
+on: [push]
+
+jobs:
+  job:
+    name: ${{ matrix.os }}-hosted-advanced
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: windows-latest
+            triplet: x64-windows
+            vcpkgCommitId: '30124253eecff36bc90f73341edbfb4f845e2a1e'
+            vcpkgPackages: 'sqlite3'
+            configuration: 'x64.*'
+          - os: ubuntu-latest
+            triplet: x64-linux
+            vcpkgCommitId: '30124253eecff36bc90f73341edbfb4f845e2a1e'
+            vcpkgPackages: 'sqlite3'
+            configuration: '.*Linux.*'
+          - os: macos-latest
+            triplet: x64-osx
+            vcpkgCommitId: '30124253eecff36bc90f73341edbfb4f845e2a1e'
+            vcpkgPackages: 'sqlite3'
+            configuration: '.*Linux.*'
+
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+
+      - uses: lukka/get-cmake@latest
+      - name: dir
+        run: find $RUNNER_WORKSPACE
+        shell: bash
+      - name: Restore artifacts, or Run vcpkg, build and cache artifacts
+        uses: lukka/run-vcpkg@dumplog
+        id: runvcpkg
+        with:
+          vcpkgArguments: '${{ matrix.vcpkgPackages }}'
+          vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
+          vcpkgTriplet: '${{ matrix.triplet }}'
+          vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
+      - name: Prints output of run-vcpkg's task
+        run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
+      - name: Run CMake and dump its failure log
+        continue-on-error: true
+        uses: lukka/run-cmake@dumplog
+        with:
+          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
+          buildDirectory: '${{ runner.workspace }}/b/dump_log'
+          cmakeAppendedArgs: '-DCMAKE_CXX_COMPILER=abc'
+          buildWithCMake: false
+      - name: dir
+        run: find $RUNNER_WORKSPACE
+        shell: bash
+
