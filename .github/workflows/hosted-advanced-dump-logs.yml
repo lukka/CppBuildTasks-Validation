@@ -5,8 +5,46 @@ name: hosted-advanced-dumplogs-autocache
 on: [push]
 
 jobs:
-  job:
-    name: ${{ matrix.os }}-hosted-advanced
+
+  vcpkg-fails:
+    name: ${{ matrix.os }}-vcpkg-log-collection-validation
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: windows-latest
+            triplet: x64-windows
+            vcpkgCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
+            vcpkgPackages: 'zlib bzip2 liblzma zstd'
+          - os: ubuntu-latest
+            triplet: x64-linux
+            vcpkgCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
+            vcpkgPackages: 'zlib bzip2 liblzma zstd'
+          - os: macos-latest
+            triplet: x64-osx
+            vcpkgCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
+            vcpkgPackages: 'zlib bzip2 liblzma zstd'
+
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+      - name: dir
+        run: find $RUNNER_WORKSPACE
+        shell: bash
+      - name: Run vcpkg and dump its failure log
+        uses: lukka/run-vcpkg@main
+        with:
+          vcpkgArguments: '${{ matrix.vcpkgPackages }}'
+          vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
+          vcpkgTriplet: '${{ matrix.triplet }}'
+          vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
+        continue-on-error: true
+
+  cmake-fails:
+    name: ${{ matrix.os }}-cmake-log-collection-validation
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
