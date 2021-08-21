@@ -4,9 +4,6 @@
   "dependencies": [
     "fmt",
     "boost-config",
-    "zlib",
-    "bzip2",
-    "liblzma",
-    "zstd"
+    "sqlite3"
   ]
 }

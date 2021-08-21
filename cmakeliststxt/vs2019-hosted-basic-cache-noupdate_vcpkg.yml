@@ -32,7 +32,6 @@ jobs:
     - task: lucappa.cmake-ninja-vcpkg-tasks.d855c326-b1c0-4d6f-b1c7-440ade6835fb.run-vcpkg@0
       displayName: 'Run vcpkg on the submodule without updating'
       inputs:
-        # vcpkgTriplet: $(vcpkgTriplet) This is not needed as it is extracted by the response file anyway.
         vcpkgArguments: '@$(Build.SourcesDirectory)/$(thisRepo)/cmakeliststxt/vcpkg_x64-windows.txt'
         vcpkgDirectory: '$(Build.SourcesDirectory)/$(thisRepo)/vcpkg'
         cleanAfterBuild: true

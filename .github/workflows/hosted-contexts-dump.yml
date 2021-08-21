@@ -1,13 +1,13 @@
 # Copyright (c) 2019-2020-2021 Luca Cappa
 # Released under the term specified in file LICENSE.txt
 # SPDX short identifier: MIT
-name: main-autocache
-on: [push]
+name: context-dumps
+on: [push, workflow_dispatch]
 
 jobs:
   job:
     env:
-      vcpkgGitCommitId: '30124253eecff36bc90f73341edbfb4f845e2a1e'
+      vcpkgGitCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -21,7 +21,7 @@ jobs:
           - os: macos-latest
             triplet: x64-osx
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
           submodules: true
       - name: Dump GitHub context
@@ -54,19 +54,19 @@ jobs:
       - name: dir
         run: gci -recurse ${{ runner.workspace }}
         if: contains( runner.os, 'windows')
-      - name: Run vcpkg and cache artifacts
-        uses: lukka/run-vcpkg@main
+      - uses: lukka/get-cmake@latest
+      - name: Setup vcpkg or restore from cache the artifacts
+        uses: lukka/run-vcpkg@v10
         id: runvcpkg
         with:
-          vcpkgArguments: '@${{ github.workspace }}/cmakesettingsjson/vcpkg_x64.txt --triplet ${{ matrix.triplet }}'
           vcpkgDirectory: ${{ github.workspace }}/../b/vcpkg
           vcpkgGitCommitId: ${{ env.vcpkgGitCommitId }}
       - name: Run CMake
-        uses: lukka/run-cmake@main
+        uses: lukka/run-cmake@v10
         id: runcmake
         with:
-          cmakeListsTxtPath: '${{ github.workspace }}/cmakeliststxt/CMakeLists.txt'
-          useVcpkgToolchainFile: true
-          buildWithCMakeArgs: '-- -v'
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakepresets/CMakeLists.txt'
+          configurePreset: ninja-multi-vcpkg
+          buildPreset: ninja-multi-vcpkg
       - name: Prints output of run-vcpkg's task
         run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET }}' "

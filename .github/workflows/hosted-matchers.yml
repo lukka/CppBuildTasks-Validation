@@ -1,12 +1,12 @@
 # Copyright (c) 2020-2021 Luca Cappa
 # Released under the term specified in file LICENSE.txt
 # SPDX short identifier: MIT
-name: hosted-basic-matchers
-on: [push]
+name: hosted-matchers
+on: [push, workflow_dispatch]
 
 jobs:
   job:
-    name: ${{ matrix.os }}-hosted-basic-matcher
+    name: ${{ matrix.os }}-${{ github.workflow }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -24,16 +24,14 @@ jobs:
             cxx: clang
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
           submodules: true
 
       - uses: lukka/get-cmake@latest
-      - name: dir
-        run: find $RUNNER_WORKSPACE
-        shell: bash
 
       - uses: ilammy/msvc-dev-cmd@v1
+
       - uses: lukka/set-shell-env@v1
         with:
           CXX: ${{ matrix.cxx }}
@@ -45,28 +43,20 @@ jobs:
         # https://github.com/actions/runner/issues/461
         if: false
         continue-on-error: true
-        uses: lukka/run-cmake@main
+        uses: lukka/run-cmake@v10
         with:
-          cmakeGenerator: 'Ninja'  
-          cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
           cmakeListsTxtPath: '${{ github.workspace }}/matchers/cmake_error/CMakeLists.txt'
-          buildWithCMake: false
-          buildDirectory: '${{ runner.workspace }}/b1/'
+          configurePreset: ninja
       - name: Run CMake+Ninja with triplet (cmd) [Build error]
         continue-on-error: true
-        uses: lukka/run-cmake@main
+        uses: lukka/run-cmake@v10
         with:
-          cmakeGenerator: 'Ninja'  
-          cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
           cmakeListsTxtPath: '${{ github.workspace }}/matchers/build_error/CMakeLists.txt'
-          buildDirectory: '${{ runner.workspace }}/b2/'
-          buildWithCMake: true
-          buildWithCMakeArgs: '-- -v -k 0'
+          configurePreset: ninja
+          buildPreset: ninja
       - name: Run CMake+Ninja with triplet (cmd) [CMake error + warning]
         continue-on-error: true
-        uses: lukka/run-cmake@main
+        uses: lukka/run-cmake@v10
         with:
-          cmakeGenerator: 'Ninja'  
-          cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
-          cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
-          buildDirectory: '${{ runner.workspace }}/b3/'
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakepresets/CMakeLists.txt'
+          configurePreset: ninja-multi-vcpkg
