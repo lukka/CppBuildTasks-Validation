@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2020-2021 Luca Cappa
+# Copyright (c) 2019-2020-2021-2022 Luca Cappa
 # Released under the term specified in file LICENSE.txt
 # SPDX short identifier: MIT
 #
@@ -42,7 +42,7 @@ jobs:
         shell: bash
 
       - name: Restore artifacts, or setup vcpkg for building artifacts
-        uses: lukka/run-vcpkg@v10
+        uses: lukka/run-vcpkg@v10.1
         id: runvcpkg
         with:
           # This one is not needed, as it is the default value anyway.
