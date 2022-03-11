@@ -7,7 +7,7 @@ on: [push]
 jobs:
   job:
     env:
-      vcpkgGitCommitId: '30124253eecff36bc90f73341edbfb4f845e2a1e'
+      vcpkgGitCommitId: 'b3d781ae271640f6024999389b4f8dbb23d5a960'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -61,6 +61,7 @@ jobs:
           vcpkgArguments: '@${{ github.workspace }}/cmakesettingsjson/vcpkg_x64.txt --triplet ${{ matrix.triplet }}'
           vcpkgDirectory: ${{ github.workspace }}/../b/vcpkg
           vcpkgGitCommitId: ${{ env.vcpkgGitCommitId }}
+          vcpkgGitURL: https://github.com/lukka/vcpkg.git/
       - name: Run CMake
         uses: lukka/run-cmake@main
         id: runcmake
