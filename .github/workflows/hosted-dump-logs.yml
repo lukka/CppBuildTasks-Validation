@@ -15,11 +15,11 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         include:
           - os: windows-latest
-            vcpkgCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
+            vcpkgCommitId: 'e6509c997fef840f7cfdb84cf6e757b70ee283a8'
           - os: ubuntu-latest
-            vcpkgCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
+            vcpkgCommitId: 'e6509c997fef840f7cfdb84cf6e757b70ee283a8'
           - os: macos-latest
-            vcpkgCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
+            vcpkgCommitId: 'e6509c997fef840f7cfdb84cf6e757b70ee283a8'
 
     steps:
       - uses: actions/checkout@v2
@@ -29,7 +29,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Run vcpkg and dump its failure log
-        uses: lukka/run-vcpkg@v10
+        uses: lukka/run-vcpkg@main
         with:
           vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
           vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
@@ -45,13 +45,15 @@ jobs:
         include:
           - os: windows-latest
             triplet: x64-windows
-            vcpkgCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
+            vcpkgCommitId: '2db6cb97ca925615eeadec71d2ec82b2a9d09e92'
           - os: ubuntu-latest
             triplet: x64-linux
-            vcpkgCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
+            vcpkgCommitId: '2db6cb97ca925615eeadec71d2ec82b2a9d09e92'
           - os: macos-latest
             triplet: x64-osx
-            vcpkgCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
+            vcpkgCommitId: '2db6cb97ca925615eeadec71d2ec82b2a9d09e92'
+    env:
+      VCPKG_URL: https://github.com/lukka/vcpkg.git/
 
     steps:
       - uses: actions/checkout@v2.3.4
@@ -63,11 +65,12 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Restore artifacts for vcpkg (or setup vcpkg if cache miss).
-        uses: lukka/run-vcpkg@v10
+        uses: lukka/run-vcpkg@main
         id: runvcpkg
         with:
           vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
           vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
+          vcpkgGitURL: '${{ env.VCPKG_URL }}'
       - name: Prints output of run-vcpkg's task
         run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}' "
       - name: Run CMake and dump its failure log

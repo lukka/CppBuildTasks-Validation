@@ -39,7 +39,7 @@
       "displayName": "MSBuild (vcpkg toolchain) Configure Settings",
       "description": "Configure with VS generators and with vcpkg toolchain",
       "binaryDir": "${sourceDir}/builds/${presetName}",
-      "generator": "Visual Studio 16 2019",
+      "generator": "Visual Studio 17 2022",
       "architecture": {
         "strategy": "set",
         "value": "x64"

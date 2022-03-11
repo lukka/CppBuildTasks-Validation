@@ -1,6 +1,0 @@
-{
-  "name": "run-cmake and run-vcpkg actions validation workflows",
-  "description": "Build C++ code with CMake, Ninja and vcpkg.",
-  "iconName": "cmake",
-  "categories": ["CMake", "cpp", "vcpkg", "cplusplus", "Ninja"]
-}

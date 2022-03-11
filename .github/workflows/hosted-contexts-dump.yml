@@ -48,6 +48,9 @@ jobs:
         env:
           MATRIX_CONTEXT: ${{ toJson(matrix) }}
         run: echo "$MATRIX_CONTEXT"
+      - name: Dump environment variables
+        run: env
+        shell: bash
       - name: dir
         run: find ${{ runner.workspace }}
         if: "!contains( runner.os, 'windows')"
@@ -56,7 +59,7 @@ jobs:
         if: contains( runner.os, 'windows')
       - uses: lukka/get-cmake@latest
       - name: Setup vcpkg or restore from cache the artifacts
-        uses: lukka/run-vcpkg@v10
+        uses: lukka/run-vcpkg@main
         id: runvcpkg
         with:
           vcpkgDirectory: ${{ github.workspace }}/../b/vcpkg
