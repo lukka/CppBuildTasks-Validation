@@ -26,7 +26,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Restore artifacts, or run vcpkg, build and cache artifacts
-        uses: lukka/run-vcpkg@dev/issue144
+        uses: lukka/run-vcpkg@v10
         id: runvcpkg
         with:
           vcpkgJsonGlob: '**/cmakepresets/vcpkg.json'

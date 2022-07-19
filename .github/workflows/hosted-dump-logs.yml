@@ -4,7 +4,6 @@
 
 name: hosted-dumplogs-autocache
 on: [push, workflow_dispatch]
-  workflow_dispatch:
 
 jobs:
 
@@ -31,7 +30,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Run vcpkg and dump its failure log
-        uses: lukka/run-vcpkg@dev/issue144
+        uses: lukka/run-vcpkg@v10
         with:
           vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
           vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
@@ -67,7 +66,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Restore artifacts for vcpkg (or setup vcpkg if cache miss).
-        uses: lukka/run-vcpkg@dev/issue144
+        uses: lukka/run-vcpkg@v10
         id: runvcpkg
         with:
           vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
