@@ -21,7 +21,7 @@ jobs:
           - os: macos-latest
             triplet: x64-osx
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
       - name: Dump GitHub context
@@ -59,13 +59,13 @@ jobs:
         if: contains( runner.os, 'windows')
       - uses: lukka/get-cmake@latest
       - name: Setup vcpkg or restore from cache the artifacts
-        uses: lukka/run-vcpkg@v10
+        uses: lukka/run-vcpkg@main
         id: runvcpkg
         with:
           vcpkgDirectory: ${{ github.workspace }}/../b/vcpkg
           vcpkgGitCommitId: ${{ env.vcpkgGitCommitId }}
       - name: Run CMake
-        uses: lukka/run-cmake@v10
+        uses: lukka/run-cmake@main
         id: runcmake
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakepresets/CMakeLists.txt'

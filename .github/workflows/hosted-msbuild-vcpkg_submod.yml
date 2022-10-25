@@ -17,7 +17,7 @@ jobs:
         os: [windows-latest]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
 
@@ -26,7 +26,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Restore artifacts, or run vcpkg, build and cache artifacts
-        uses: lukka/run-vcpkg@v10
+        uses: lukka/run-vcpkg@main
         id: runvcpkg
         with:
           vcpkgJsonGlob: '**/cmakepresets/vcpkg.json'
@@ -36,7 +36,7 @@ jobs:
       - name: Prints output of run-vcpkg's action.
         run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}' "
       - name: Run CMake+MSBuild
-        uses: lukka/run-cmake@v10
+        uses: lukka/run-cmake@main
         if: contains( matrix.os, 'windows')
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakepresets/CMakeLists.txt'
