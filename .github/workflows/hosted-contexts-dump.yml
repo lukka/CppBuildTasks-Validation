@@ -21,7 +21,7 @@ jobs:
           - os: macos-latest
             triplet: x64-osx
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
       - name: Dump GitHub context

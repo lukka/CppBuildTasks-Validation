@@ -23,7 +23,7 @@ jobs:
             vcpkgCommitId: 'e6509c997fef840f7cfdb84cf6e757b70ee283a8'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
       - name: dir
@@ -57,7 +57,7 @@ jobs:
       VCPKG_URL: https://github.com/lukka/vcpkg.git/
 
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3
         with:
           submodules: true
 

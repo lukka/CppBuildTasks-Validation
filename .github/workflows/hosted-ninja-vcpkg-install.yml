@@ -30,14 +30,14 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         include:
           - os: windows-latest
-            vcpkgCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
+            vcpkgCommitId: 'cef0b3ec767df6e83806899fe9525f6cf8d7bc91'
           - os: ubuntu-latest
-            vcpkgCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
+            vcpkgCommitId: 'cef0b3ec767df6e83806899fe9525f6cf8d7bc91'
           - os: macos-latest
-            vcpkgCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
+            vcpkgCommitId: 'cef0b3ec767df6e83806899fe9525f6cf8d7bc91'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
 
