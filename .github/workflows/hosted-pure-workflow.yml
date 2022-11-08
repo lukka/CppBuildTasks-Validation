@@ -3,7 +3,7 @@
 # SPDX short identifier: MIT
 
 # A "pure" GitHub workflow using CMake, Ninja and vcpkg to build a C/C++ codebase.
-# It leverages both CMakePresets.json and vcpkg.json to have consistent build locallly
+# It leverages both CMakePresets.json and vcpkg.json to have consistent build locally
 # and on continuous integration servers (aka build agents).
 # It is called "pure workflow" because it is an example which minimizes the usage of
 # custom GitHub actions, but leverages directly the tools that could be easily run on
