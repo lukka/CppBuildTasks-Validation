@@ -43,20 +43,20 @@ jobs:
         # https://github.com/actions/runner/issues/461
         if: false
         continue-on-error: true
-        uses: lukka/run-cmake@dev/customargs_optconf
+        uses: lukka/run-cmake@main
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/matchers/cmake_error/CMakeLists.txt'
           configurePreset: ninja
       - name: Run CMake+Ninja with triplet (cmd) [Build error]
         continue-on-error: true
-        uses: lukka/run-cmake@dev/customargs_optconf
+        uses: lukka/run-cmake@main
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/matchers/build_error/CMakeLists.txt'
           configurePreset: ninja
           buildPreset: ninja
       - name: Run CMake+Ninja with triplet (cmd) [CMake error + warning]
         continue-on-error: true
-        uses: lukka/run-cmake@dev/customargs_optconf
+        uses: lukka/run-cmake@main
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakepresets/CMakeLists.txt'
           configurePreset: ninja-multi-vcpkg
