@@ -5,11 +5,12 @@
 # The peculiarity of this workflow is that assumes vcpkg stored as a submodule of this repository.
 # This workflow does the following:
 # - Restores vcpkg artifacts from cache.
+# - Generates build files with the Ninja Multi-Config generator.
 # - Sets up vcpkg if needed, then run CMake with CMakePreset.json using a configuration
 #   that leverages the vcpkg's toolchain file. This will automatically run vcpkg to install dependencies
 #   described by the vcpkg.json manifest file. It will be a no-op if those are restored from cache.
 # - Finally builds the sources with Ninja.
-name: hosted-ninja-vcpkg_submod-triplet-autocache
+name: hosted-ninja_multi-vcpkg_submod-triplet-autocache
 on: [push, workflow_dispatch]
 
 jobs:
@@ -54,13 +55,14 @@ jobs:
         shell: bash
       - name: Prints output of run-vcpkg's action.
         run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}' "
-      - name: Run CMake+vcpkg+Ninja
-        uses: lukka/run-cmake@v10
+      - name: Run CMake+vcpkg+NinjaMulti-Config (Release configuration)
+        uses: lukka/run-cmake@dev/customargs_optconf
         id: runcmake
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakepresets/CMakeLists.txt'
           configurePreset: 'ninja-multi-vcpkg'
           buildPreset: 'ninja-multi-vcpkg'
+          buildPresetAdditionalArgs: '[`--config Release`]'
       - name: List $RUNNER_WORKSPACE after build
         run: find $RUNNER_WORKSPACE
         shell: bash
