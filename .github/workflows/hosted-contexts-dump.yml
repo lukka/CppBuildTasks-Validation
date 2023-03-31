@@ -7,7 +7,7 @@ on: [push, workflow_dispatch]
 jobs:
   job:
     env:
-      vcpkgGitCommitId: '253704407ae68efa37bf8f5b59b3e06dd40d3d3f'
+      vcpkgGitCommitId: 'c9f906558f9bb12ee9811d6edc98ec9255c6cda5'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -59,11 +59,12 @@ jobs:
         if: contains( runner.os, 'windows')
       - uses: lukka/get-cmake@latest
       - name: Setup vcpkg or restore from cache the artifacts
-        uses: lukka/run-vcpkg@v10
+        uses: lukka/run-vcpkg@v11
         id: runvcpkg
         with:
           vcpkgDirectory: ${{ github.workspace }}/../b/vcpkg
           vcpkgGitCommitId: ${{ env.vcpkgGitCommitId }}
+          vcpkgJsonGlob: '**/cmakepresets/vcpkg.json'
       - name: Run CMake
         uses: lukka/run-cmake@v10
         id: runcmake

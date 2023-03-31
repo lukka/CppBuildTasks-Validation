@@ -16,11 +16,11 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         include:
           - os: windows-latest
-            vcpkgCommitId: '253704407ae68efa37bf8f5b59b3e06dd40d3d3f'
+            vcpkgCommitId: 'c9f906558f9bb12ee9811d6edc98ec9255c6cda5'
           - os: ubuntu-latest
-            vcpkgCommitId: '253704407ae68efa37bf8f5b59b3e06dd40d3d3f'
+            vcpkgCommitId: 'c9f906558f9bb12ee9811d6edc98ec9255c6cda5'
           - os: macos-latest
-            vcpkgCommitId: '253704407ae68efa37bf8f5b59b3e06dd40d3d3f'
+            vcpkgCommitId: 'c9f906558f9bb12ee9811d6edc98ec9255c6cda5'
 
     steps:
       - uses: actions/checkout@v3
@@ -30,10 +30,11 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Run vcpkg and dump its failure log
-        uses: lukka/run-vcpkg@v10
+        uses: lukka/run-vcpkg@v11
         with:
           vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
           vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
+          vcpkgJsonGlob: '**/cmakepresets/vcpkg.json'
         continue-on-error: true
 
   cmake-fails:
@@ -46,15 +47,15 @@ jobs:
         include:
           - os: windows-latest
             triplet: x64-windows
-            vcpkgCommitId: '2db6cb97ca925615eeadec71d2ec82b2a9d09e92'
+            vcpkgCommitId: 'c9f906558f9bb12ee9811d6edc98ec9255c6cda5'
           - os: ubuntu-latest
             triplet: x64-linux
-            vcpkgCommitId: '2db6cb97ca925615eeadec71d2ec82b2a9d09e92'
+            vcpkgCommitId: 'c9f906558f9bb12ee9811d6edc98ec9255c6cda5'
           - os: macos-latest
             triplet: x64-osx
-            vcpkgCommitId: '2db6cb97ca925615eeadec71d2ec82b2a9d09e92'
+            vcpkgCommitId: 'c9f906558f9bb12ee9811d6edc98ec9255c6cda5'
     env:
-      VCPKG_URL: https://github.com/lukka/vcpkg.git/
+      VCPKG_URL: https://github.com/microsoft/vcpkg.git/
 
     steps:
       - uses: actions/checkout@v3
@@ -66,12 +67,13 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Restore artifacts for vcpkg (or setup vcpkg if cache miss).
-        uses: lukka/run-vcpkg@v10
+        uses: lukka/run-vcpkg@v11
         id: runvcpkg
         with:
           vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
           vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
           vcpkgGitURL: '${{ env.VCPKG_URL }}'
+          vcpkgJsonGlob: '**/cmakepresets/vcpkg.json'
       - name: Prints output of run-vcpkg's task
         run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}' "
       - name: Run CMake and dump its failure log
