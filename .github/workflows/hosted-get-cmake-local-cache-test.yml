@@ -2,7 +2,7 @@
 # Released under the term specified in file LICENSE.txt
 # SPDX short identifier: MIT
 #
-name: get-cmake-self-hosted-rumner-test
+name: get-cmake-self-hosted-runner-test
 on: [push, workflow_dispatch]
 
 jobs:
