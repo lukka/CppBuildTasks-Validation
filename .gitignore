@@ -3,3 +3,4 @@ build
 vcpkg_manifest/vcpkg_installed/*
 .DS_Store
 builds
+cmakepresets/vcpkg_installed/*

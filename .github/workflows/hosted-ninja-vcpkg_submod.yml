@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 0
 
       - uses: lukka/get-cmake@latest
-      - name: dir
+      - name: List $RUNNER_WORKSPACE before vcpkg is setup
         run: find $RUNNER_WORKSPACE
         shell: bash
 
