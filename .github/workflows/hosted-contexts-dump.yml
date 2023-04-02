@@ -58,8 +58,8 @@ jobs:
         run: gci -recurse ${{ runner.workspace }}
         if: contains( runner.os, 'windows')
       - uses: lukka/get-cmake@latest
-      - name: Setup vcpkg or restore from cache the artifacts
-        uses: lukka/run-vcpkg@v11
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@dev/disable-runvcpkg-cache-bydefault
         id: runvcpkg
         with:
           vcpkgDirectory: ${{ github.workspace }}/../b/vcpkg

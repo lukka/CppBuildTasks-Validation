@@ -41,8 +41,8 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
 
-      - name: Restore artifacts, or setup vcpkg (do not install any package)
-        uses: lukka/run-vcpkg@v11
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@dev/disable-runvcpkg-cache-bydefault
         id: runvcpkg
         with:
           # This specifies the location of vcpkg, where it is going to be restored from cache, or create from scratch.
