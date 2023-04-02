@@ -30,7 +30,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Run vcpkg and dump its failure log
-        uses: lukka/run-vcpkg@v11
+        uses: lukka/run-vcpkg@main
         with:
           vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
           vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
@@ -66,8 +66,8 @@ jobs:
       - name: dir
         run: find $RUNNER_WORKSPACE
         shell: bash
-      - name: Restore artifacts for vcpkg (or setup vcpkg if cache miss).
-        uses: lukka/run-vcpkg@v11
+      - name: Setup vpkg
+        uses: lukka/run-vcpkg@main
         id: runvcpkg
         with:
           vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
