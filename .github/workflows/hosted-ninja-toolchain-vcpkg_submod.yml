@@ -5,7 +5,7 @@
 # Setup vcpkg (which is stored in a Git submodule), then run CMake with CMakePreset.json and vcpkg's toolchain file,
 # to automatically run vcpkg to install dependencies described by the vcpkg.json manifest file, and build the sources
 # with Ninja.
-name: hosted-ninja-toolchain-vcpkg_submod-autocache
+name: hosted-ninja-toolchain-vcpkg_submod-cacheoff
 on: [push, workflow_dispatch]
 
 jobs:

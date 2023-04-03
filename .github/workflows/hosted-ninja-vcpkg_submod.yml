@@ -1,15 +1,17 @@
-# Copyright (c) 2019-2020-2021-2022 Luca Cappa
+# Copyright (c) 2019-2020-2021-2022-2023 Luca Cappa
 # Released under the term specified in file LICENSE.txt
 # SPDX short identifier: MIT
 #
-# The peculiarity of this workflow is that assumes vcpkg stored as a submodule of this repository.
-# This workflow does the following:
-# - Restores vcpkg artifacts from cache.
+# The peculiarity of this workflow is that assumes vcpkg stored as a submodule of 
+# this repository.
+# The workflow does the following:
 # - Sets up vcpkg if needed, then run CMake with CMakePreset.json using a configuration
-#   that leverages the vcpkg's toolchain file. This will automatically run vcpkg to install dependencies
-#   described by the vcpkg.json manifest file. It will be a no-op if those are restored from cache.
+#   that leverages the vcpkg's toolchain file. This will automatically run vcpkg to install
+#   dependencies described by the vcpkg.json manifest file. 
+#   vcpkg's Binary Caching backed by GH Action cache is being used. It will be a no-op if 
+#   dependencies are restored from GH Action cache.
 # - Finally builds the sources with Ninja.
-name: hosted-ninja-vcpkg_submod-autocache
+name: hosted-ninja-vcpkg_submod-cacheoff
 on: [push, workflow_dispatch]
 
 jobs:
@@ -27,7 +29,8 @@ jobs:
           submodules: true
           # This is useful to avoid https://github.com/microsoft/vcpkg/issues/25349
           # which is caused by missing Git history on the vcpkg submodule which ports 
-          # try to access.
+          # try to access. 
+          # Do not use if not needed, since it slows down the checkout of sources.
           fetch-depth: 0
 
       - uses: lukka/get-cmake@latest
