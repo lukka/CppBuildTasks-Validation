@@ -2,7 +2,7 @@
 # Released under the term specified in file LICENSE.txt
 # SPDX short identifier: MIT
 
-name: hosted-dumplogs-autocache
+name: hosted-dumplogs-cacheoff
 on: [push, workflow_dispatch]
 
 jobs:

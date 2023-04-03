@@ -1,18 +1,18 @@
-# Copyright (c) 2019-2020-2021-2022-2023 Luca Cappa
+# Copyright (c) 2019-2020-2021-2022 Luca Cappa
 # Released under the term specified in file LICENSE.txt
 # SPDX short identifier: MIT
 #
-# The peculiarity of this workflow is that assumes vcpkg stored as a submodule of this
-# repository.
-# The workflow does the following:
+# The peculiarity of this workflow is that assumes vcpkg stored as a submodule of this repository.
+# This workflow does the following:
+# - Restores vcpkg exe and data files from cache. Not the packages that are fetched by vcpkg by means
+#   of GH Action cache.
 # - Sets up vcpkg if needed, then run CMake with CMakePreset.json using a configuration
-#   that leverages the vcpkg's toolchain file.
-#   This will automatically run vcpkg to install dependencies described by the vcpkg.json
-#   manifest file.
+#   that leverages the vcpkg's toolchain file. This will automatically run vcpkg to install 
+#   dependencies described by the vcpkg.json manifest file. 
 #   vcpkg's Binary Caching backed by GH Action cache is being used. It will be a no-op if 
-#   the dependencies are restored from GH Action cache.
+#   those are restored from GH Action cache.
 # - Finally builds the sources with Ninja.
-name: hosted-ninja_multi-vcpkg_submod-triplet-cacheoff
+name: hosted-ninja-vcpkg_submod-autocache
 on: [push, workflow_dispatch]
 
 jobs:
@@ -23,48 +23,43 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        include:
-          - os: windows-latest
-            triplet: x64-windows
-          - os: ubuntu-latest
-            triplet: x64-linux
-          - os: macos-latest
-            triplet: x64-osx
-
-    env:
-      VCPKG_DEFAULT_TRIPLET: ${{ matrix.triplet }}
 
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
+          # This is useful to avoid https://github.com/microsoft/vcpkg/issues/25349
+          # which is caused by missing Git history on the vcpkg submodule which ports 
+          # try to access.
+          fetch-depth: 0
 
       - uses: lukka/get-cmake@latest
-      - name: dir
+      - name: List $RUNNER_WORKSPACE before vcpkg is setup
         run: find $RUNNER_WORKSPACE
         shell: bash
 
-      - name: Setup vcpkg
+      - name: Restore vcpkg executable and data files from GH Action cache, or setup vcpkg from scratch if there is a cache-miss
         uses: lukka/run-vcpkg@main
         id: runvcpkg
         with:
           # This one is not needed, as it is the default value anyway.
           # vcpkgDirectory: '${{ github.workspace }}/vcpkg'
           vcpkgJsonGlob: '**/cmakepresets/vcpkg.json'
+          # Leverage the cache containing vcpkg executable and data files (e.g. port files).
+          doNotCache: false
 
       - name: List $RUNNER_WORKSPACE before build
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Prints output of run-vcpkg's action.
         run: echo "root='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}', triplet='${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_DEFAULT_TRIPLET_OUT }}' "
-      - name: Run CMake+vcpkg+NinjaMulti-Config (Release configuration)
+      - name: Run CMake+vcpkg+Ninja
         uses: lukka/run-cmake@v10
         id: runcmake
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakepresets/CMakeLists.txt'
           configurePreset: 'ninja-multi-vcpkg'
           buildPreset: 'ninja-multi-vcpkg'
-          buildPresetAdditionalArgs: '[`--config Release`]'
       - name: List $RUNNER_WORKSPACE after build
         run: find $RUNNER_WORKSPACE
         shell: bash

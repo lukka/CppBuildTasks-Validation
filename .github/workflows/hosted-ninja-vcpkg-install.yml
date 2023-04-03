@@ -1,23 +1,28 @@
-# Copyright (c) 2019-2020-2021-2022 Luca Cappa
+# Copyright (c) 2019-2020-2021-2022-2023 Luca Cappa
 # Released under the term specified in file LICENSE.txt
 # SPDX short identifier: MIT
 #
-# The peculiarity of this workflow is that runs `vcpkg install` at `run-vcpkg`, rather than with `run-camake.
+# The peculiarity of this workflow is that runs `vcpkg install` at `run-vcpkg`, 
+# rather than with `run-cmake.
 # Also, it does not assume that vcpkg is a submodule of this repository.
 #
-# This workflow does the following:
-# - Download and setup vcpkg (which is stored NOT in a Git submodule), then run `vcpkg install` to install the
-#   packages described in vcpkg.json manifest file.
-# - Note: at this point, all the vcpkg dependencies specified in vcpkg.json are installed, and it is possible to
-#   run anything that is needed to build the C++ application.
+# The workflow does the following:
+# - Download and setup vcpkg (which is stored NOT in a Git submodule), then run
+#   `vcpkg install` to install the packages described in vcpkg.json manifest file.
+# - Note: at this point, all the vcpkg dependencies specified in vcpkg.json are installed,
+#   and it is possible to run anything that is needed to build the C++ application as.
+#   long the paths to headers and libraries are correctly set.
 #
-# - _Warning:_ in this sample, CMake is going to be used to build the application, but anything can be used. This
-#   means that vcpkg will be run again and it will quickly realize that all dependencies are already installed.
-#   In short: *it is not needed to run vcpkg* in the step before if you build with CMake, since CMake will run it
-#   for you already! Look to (hosted-ninja-vcpkg_submod.yml)[./hosted-ninja-vcpkg_submod.yml] sample.
+# - _Warning:_ in this sample, CMake is going to be used to build the application, 
+#   but anything else could be used. This means that vcpkg will be run again and 
+#   it will quickly realize that all dependencies are already installed.
+#   In short: *it is not needed to run vcpkg* in the step before if you build with CMake,
+#   since CMake will run it for you already! 
+#   Look to (hosted-ninja-vcpkg_submod.yml)[./hosted-ninja-vcpkg_submod.yml] sample.
 #
-# - Finally, it runs CMake with CMakePreset.json and vcpkg's toolchain file to build the C++ sources with Ninja.
-name: hosted-ninja-vcpkg-install-autocache
+# - Finally, it runs CMake with CMakePreset.json and vcpkg's toolchain file to build 
+#   the C++ sources with Ninja.
+name: hosted-ninja-vcpkg-install-cacheoff
 on: [push, workflow_dispatch]
 
 jobs:
