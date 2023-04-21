@@ -3,7 +3,6 @@
   "version-string": "0.0.1",
   "dependencies": [
     "boost-config",
-    "sqlite3",
-    "boost"
+    "sqlite3"
   ]
 }
