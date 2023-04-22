@@ -110,5 +110,28 @@
         }
       ]
     }
-  ]  
+  ],
+  "packagePresets": [
+    {
+      "packageName": "default-package-name",
+      "packageVersion": "0.1",
+      "name": "default",
+      "configurePreset": "ninja",
+      "generators": [
+        "TGZ"
+      ]
+    },
+    {
+      "packageName": "default-multi-package-name",
+      "packageVersion": "0.1",
+      "name": "ninja-multi-vcpkg",
+      "configurePreset": "ninja-multi-vcpkg",
+      "generators": [
+        "TGZ"
+      ],
+      "configurations": [
+        "Debug"
+      ]
+    }
+  ]
 }

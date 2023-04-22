@@ -18,3 +18,4 @@ target_sources(main PRIVATE test.cpp)
 target_link_libraries(main PRIVATE unofficial::sqlite3::sqlite3)
 set_property(TARGET main PROPERTY CXX_STANDARD 20)
 
+include(CPack)
