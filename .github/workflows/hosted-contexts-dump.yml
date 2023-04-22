@@ -66,7 +66,7 @@ jobs:
           vcpkgGitCommitId: ${{ env.vcpkgGitCommitId }}
           vcpkgJsonGlob: '**/cmakepresets/vcpkg.json'
       - name: Run CMake
-        uses: lukka/run-cmake@dev/package-preset
+        uses: lukka/run-cmake@v10
         id: runcmake
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakepresets/CMakeLists.txt'
