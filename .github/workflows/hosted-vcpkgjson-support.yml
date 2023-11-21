@@ -1,18 +1,12 @@
-# Copyright (c) 2019-2020-2021-2022 Luca Cappa
+# Copyright (c) 2019-2020-2021-2022-2023 Luca Cappa
 # Released under the term specified in file LICENSE.txt
 # SPDX short identifier: MIT
 #
-# The peculiarity of this workflow is that assumes vcpkg stored as a submodule of this repository.
-# This workflow does the following:
-# - Restores vcpkg exe and data files from cache. Not the packages that are fetched by vcpkg by means
-#   of GH Action cache.
-# - Sets up vcpkg if needed, then run CMake with CMakePreset.json using a configuration
-#   that leverages the vcpkg's toolchain file. This will automatically run vcpkg to install 
-#   dependencies described by the vcpkg.json manifest file. 
-#   vcpkg's Binary Caching backed by GH Action cache is being used. It will be a no-op if 
-#   those are restored from GH Action cache.
-# - Finally builds the sources with Ninja.
-name: hosted-ninja-vcpkg_submod-autocache
+# The workflow does the following:
+# - Instead of providing the Git commit id of the vcpkg repository, the builtin baseline
+#   from vcpkg.json is being used.
+
+name: hosted-ninja-vcpkg-no-submod-nogitcommitid_vcpkgjson-cacheoff
 on: [push, workflow_dispatch]
 
 jobs:
@@ -30,7 +24,8 @@ jobs:
           submodules: true
           # This is useful to avoid https://github.com/microsoft/vcpkg/issues/25349
           # which is caused by missing Git history on the vcpkg submodule which ports 
-          # try to access.
+          # try to access. 
+          # Do not use if not needed, since it slows down the checkout of sources.
           fetch-depth: 0
 
       - uses: lukka/get-cmake@latest
@@ -38,16 +33,14 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
 
-      - name: Restore vcpkg executable and data files from GH Action cache, or setup vcpkg from scratch if there is a cache-miss
+      - name: Setup vcpkg
         uses: lukka/run-vcpkg@dev/vcpkgconfjson-support
         id: runvcpkg
         with:
-          # This one is not needed, as it is the default value anyway.
-          # vcpkgDirectory: '${{ github.workspace }}/vcpkg'
-          vcpkgJsonGlob: '**/cmakepresets/vcpkg.json'
-          # Leverage the cache containing vcpkg executable and data files (e.g. port files).
-          doNotCache: false
-
+          # This one is deliberately pointing to a non existing directory (so that vcpkg is not identified as a submodule of this repository).
+          vcpkgDirectory: '${{ github.workspace }}/cmakepresets+vcpkgjson/vcpkg'
+          vcpkgJsonGlob: '**/cmakepresets+vcpkgconfigurejson/vcpkg.json''
+'
       - name: List $RUNNER_WORKSPACE before build
         run: find $RUNNER_WORKSPACE
         shell: bash
@@ -57,10 +50,9 @@ jobs:
         uses: lukka/run-cmake@v10
         id: runcmake
         with:
-          cmakeListsTxtPath: '${{ github.workspace }}/cmakepresets/CMakeLists.txt'
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakepresets+vcpkgjson/CMakeLists.txt'
           configurePreset: 'ninja-multi-vcpkg'
           buildPreset: 'ninja-multi-vcpkg'
-          packagePreset: 'ninja-multi-vcpkg'
       - name: List $RUNNER_WORKSPACE after build
         run: find $RUNNER_WORKSPACE
         shell: bash

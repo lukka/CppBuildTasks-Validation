@@ -1,0 +1,12 @@
+{
+  "name": "example",
+  "version-string": "0.0.1",
+  "dependencies": [
+    "fmt",
+    "boost-config",
+    "zlib",
+    "bzip2",
+    "liblzma",
+    "zstd"
+  ]
+}

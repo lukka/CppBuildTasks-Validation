@@ -7,7 +7,7 @@ on: [push, workflow_dispatch]
 jobs:
   job:
     env:
-      vcpkgGitCommitId: 'c9f906558f9bb12ee9811d6edc98ec9255c6cda5'
+      vcpkgGitCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -59,7 +59,7 @@ jobs:
         if: contains( runner.os, 'windows')
       - uses: lukka/get-cmake@latest
       - name: Setup vcpkg
-        uses: lukka/run-vcpkg@main
+        uses: lukka/run-vcpkg@dev/vcpkgconfjson-support
         id: runvcpkg
         with:
           vcpkgDirectory: ${{ github.workspace }}/../b/vcpkg

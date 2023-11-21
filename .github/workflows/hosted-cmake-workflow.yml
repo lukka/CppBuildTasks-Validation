@@ -26,7 +26,7 @@ jobs:
         shell: bash
 
       - name: Setup vcpkg for building artifacts
-        uses: lukka/run-vcpkg@main
+        uses: lukka/run-vcpkg@dev/vcpkgconfjson-support
         id: runvcpkg
         with:
           vcpkgJsonGlob: '**/cmakepresets/vcpkg.json'
