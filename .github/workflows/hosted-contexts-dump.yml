@@ -59,7 +59,7 @@ jobs:
         if: contains( runner.os, 'windows')
       - uses: lukka/get-cmake@latest
       - name: Setup vcpkg
-        uses: lukka/run-vcpkg@dev/vcpkgconfjson-support
+        uses: lukka/run-vcpkg@main
         id: runvcpkg
         with:
           vcpkgDirectory: ${{ github.workspace }}/../b/vcpkg

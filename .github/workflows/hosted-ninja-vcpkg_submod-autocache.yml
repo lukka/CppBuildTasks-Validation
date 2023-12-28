@@ -39,7 +39,7 @@ jobs:
         shell: bash
 
       - name: Restore vcpkg executable and data files from GH Action cache, or setup vcpkg from scratch if there is a cache-miss
-        uses: lukka/run-vcpkg@dev/vcpkgconfjson-support
+        uses: lukka/run-vcpkg@main
         id: runvcpkg
         with:
           # This one is not needed, as it is the default value anyway.
