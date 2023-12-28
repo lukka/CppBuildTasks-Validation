@@ -16,11 +16,11 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         include:
           - os: windows-latest
-            vcpkgCommitId: 'c9f906558f9bb12ee9811d6edc98ec9255c6cda5'
+            vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
           - os: ubuntu-latest
-            vcpkgCommitId: 'c9f906558f9bb12ee9811d6edc98ec9255c6cda5'
+            vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
           - os: macos-latest
-            vcpkgCommitId: 'c9f906558f9bb12ee9811d6edc98ec9255c6cda5'
+            vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
 
     steps:
       - uses: actions/checkout@v3
@@ -30,7 +30,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Run vcpkg and dump its failure log
-        uses: lukka/run-vcpkg@main
+        uses: lukka/run-vcpkg@dev/vcpkgconfjson-support
         with:
           vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
           vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
@@ -47,13 +47,13 @@ jobs:
         include:
           - os: windows-latest
             triplet: x64-windows
-            vcpkgCommitId: 'c9f906558f9bb12ee9811d6edc98ec9255c6cda5'
+            vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
           - os: ubuntu-latest
             triplet: x64-linux
-            vcpkgCommitId: 'c9f906558f9bb12ee9811d6edc98ec9255c6cda5'
+            vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
           - os: macos-latest
             triplet: x64-osx
-            vcpkgCommitId: 'c9f906558f9bb12ee9811d6edc98ec9255c6cda5'
+            vcpkgCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
     env:
       VCPKG_URL: https://github.com/microsoft/vcpkg.git/
 
@@ -67,7 +67,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Setup vpkg
-        uses: lukka/run-vcpkg@main
+        uses: lukka/run-vcpkg@dev/vcpkgconfjson-support
         id: runvcpkg
         with:
           vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
