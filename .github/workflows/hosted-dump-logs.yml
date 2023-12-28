@@ -30,7 +30,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Run vcpkg and dump its failure log
-        uses: lukka/run-vcpkg@main
+        uses: lukka/run-vcpkg@v11
         with:
           vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'
           vcpkgGitCommitId: '${{ matrix.vcpkgCommitId }}'
@@ -67,7 +67,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Setup vpkg
-        uses: lukka/run-vcpkg@main
+        uses: lukka/run-vcpkg@v11
         id: runvcpkg
         with:
           vcpkgDirectory: '${{ runner.workspace }}/b/vcpkg'

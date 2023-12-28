@@ -34,7 +34,7 @@ jobs:
         shell: bash
 
       - name: Setup vcpkg
-        uses: lukka/run-vcpkg@main
+        uses: lukka/run-vcpkg@v11
         id: runvcpkg
         with:
           # This one is deliberately pointing to a non existing directory (so that vcpkg is not identified as a submodule of this repository).

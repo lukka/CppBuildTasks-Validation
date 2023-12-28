@@ -27,7 +27,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Setup vcpkg
-        uses: lukka/run-vcpkg@main
+        uses: lukka/run-vcpkg@v11
         id: runvcpkg
         with:
           vcpkgJsonGlob: '**/cmakepresets/vcpkg.json'
