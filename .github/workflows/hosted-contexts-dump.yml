@@ -7,7 +7,7 @@ on: [push, workflow_dispatch]
 jobs:
   job:
     env:
-      vcpkgGitCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
+      vcpkgGitCommitId: 'c3867e714dd3a51c272826eea77267876517ed99'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -66,7 +66,7 @@ jobs:
           vcpkgGitCommitId: ${{ env.vcpkgGitCommitId }}
           vcpkgJsonGlob: '**/cmakepresets/vcpkg.json'
       - name: Run CMake
-        uses: lukka/run-cmake@v10
+        uses: lukka/run-cmake@main
         id: runcmake
         with:
           cmakeListsTxtPath: '${{ github.workspace }}/cmakepresets/CMakeLists.txt'
